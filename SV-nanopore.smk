@@ -38,9 +38,9 @@ rule sniffles:
     input:
         "ngmlr_alignment/" + config["samplename"] + ".bam"
     output:
-        protected("sniffles_calls/" + config["samplename"] + ".vcf")
+        protected("sniffles_calls/" + config["samplename"] + ".bedpe")
     threads: 48
     log:
         "logs/sniffles/" + config["samplename"] + ".log"
     shell:
-        "sniffles --mapped_reads {input} --vcf {output} --threads {threads} 2> {log}"
+        "sniffles --mapped_reads {input} --bedpe {output} --threads {threads} 2> {log}"
