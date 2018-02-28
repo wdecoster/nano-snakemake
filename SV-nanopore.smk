@@ -30,8 +30,10 @@ rule samtools_index:
     output:
         "ngmlr_alignment/" + config["samplename"] + ".bam.bai"
     threads: 24
+    log:
+        "logs/samtools_index/" + config["samplename"] + ".log"
     shell:
-        "samtools index -@ {threads} {input}"
+        "samtools index -@ {threads} {input} 2> {log}"
 
 
 rule sniffles:
