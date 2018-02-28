@@ -1,2 +1,5 @@
 # SV-snakemake
-A snakemake pipeline for SV analysis from nanopore genome sequencing
+A set of snakemake pipelines for nanopore whole genome sequencing processing and analysis
+
+- SV analysis using ngmlr and sniffles
+- methylation analysis using nanopolish
