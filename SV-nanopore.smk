@@ -21,7 +21,7 @@ rule ngmlr:
     shell:
         "zcat {input.fq}/*.fastq.gz | \
          ngmlr -x ont -t {threads} -r {input.genome} | \
-         samtools sort -o {output} - 2> {log}"
+         samtools sort -@ {threads} -o {output} - 2> {log}"
 
 
 rule samtools_index:
