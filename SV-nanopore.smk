@@ -8,7 +8,7 @@ def get_samples():
 rule all:
     input:
         "ngmlr_alignment/" + config["samplename"] + ".bam.bai",
-        protected("sniffles_calls/" + config["samplename"] + ".vcf")
+        protected("sniffles_calls/" + config["samplename"] + ".bedpe")
 
 rule ngmlr:
     input:
