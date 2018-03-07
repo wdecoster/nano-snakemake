@@ -1,5 +1,3 @@
-fqfolder:
-    /storage/macchiato/complgen3/results/nbd/promethion/hg19s/exp20180207_wouter_d6843_2/fastq
-
-samplename:
-    d6843
+samples:
+    d2337: /storage/macchiato/complgen3/results/nbd/promethion/hg19s/exp20180216_d2337_wouter/fastq
+    d8250: /storage/macchiato/complgen3/results/nbd/promethion/hg19s/exp20180223_d8250_wouter/fastq
