@@ -122,7 +122,5 @@ rule mosdepth:
         "mosdepth --threads {threads} --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
 
 
-# sniffles with --Ivcf
-# survivor again
 # annotate vcf
 # add mosdepth information and plots on called sites
