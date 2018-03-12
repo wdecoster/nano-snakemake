@@ -119,7 +119,7 @@ rule mosdepth:
     log:
         "logs/mosdepth/mosdepth_{sample}.log"
     shell:
-        "mosdepth --threads {threads} --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
+        "mosdepth --threads {threads} -n --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
 
 
 # annotate vcf
