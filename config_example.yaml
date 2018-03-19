@@ -1,0 +1,4 @@
+samples:
+    sampleA: /path/to/sampleC/fastq
+    sampleB: /path/to/sampleC/fastq
+    sampleC: /path/to/sampleC/fastq
