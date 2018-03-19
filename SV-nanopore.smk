@@ -10,6 +10,7 @@ rule all:
         expand("ngmlr_alignment/{sample}.bam.bai", sample=config["samples"]),
         expand("sniffles_genotypes/{sample}.vcf", sample=config["samples"]),
         expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"]),
+        expand("SV-plots/SV-length_{sample}.png", sample=config["samples"]),
 
 
 rule ngmlr:
@@ -112,7 +113,7 @@ rule mosdepth:
         bam = "ngmlr_alignment/{sample}.bam",
         bai = "ngmlr_alignment/{sample}.bam.bai"
     threads: 4
-    output:
+    output:  # change if mosdepth 0.2.2
         protected("mosdepth/{sample}.mosdepth.dist.txt")
     params:
         windowsize = 1000,
@@ -121,6 +122,17 @@ rule mosdepth:
         "logs/mosdepth/mosdepth_{sample}.log"
     shell:
         "mosdepth --threads {threads} -n --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
+
+
+rule mosdepth_global_plot:
+    input:   # change if mosdepth 0.2.2
+        expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"])
+    output:
+        protected("mosdepth_global_plot/global.html")
+    log:
+        "logs/mosdepth/mosdepth_global_plot.log"
+    shell:
+        "python scripts/plot_dist.py {input} -o {output} 2> {log}"
 
 
 rule SV_length_plot:
