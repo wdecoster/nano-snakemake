@@ -9,7 +9,8 @@ rule all:
     input:
         expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
         expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
-        "sniffles_combined/genotypes.vcf"
+        "sniffles_combined/genotypes.vcf",
+        "mosdepth/regions.combined.gz",
 
 
 rule ngmlr:
@@ -113,7 +114,8 @@ rule mosdepth:
         bai = "ngmlr_alignment/{sample}.bam.bai"
     threads: 4
     output:  # change if mosdepth 0.2.2
-        protected("mosdepth/{sample}.mosdepth.dist.txt")
+        protected("mosdepth/{sample}.mosdepth.dist.txt"),
+        protected("mosdepth/{sample}.regions.bed.gz"),
     params:
         windowsize = 1000,
         prefix = "{sample}",
@@ -121,6 +123,17 @@ rule mosdepth:
         "logs/mosdepth/mosdepth_{sample}.log"
     shell:
         "mosdepth --threads {threads} -n --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
+
+
+rule mosdepth_combine:
+    input:
+        expand("mosdepth/{sample}.regions.bed.gz", sample=config["samples"])
+    output:
+        "mosdepth/regions.combined.gz"
+    log:
+        "logs/mosdepth/mosdepth_combine.log"
+    shell:
+        "python ~/projects/SV-snakemake/scripts/combine_mosdepth.py {input} -o {output} 2> {log}"
 
 
 rule mosdepth_global_plot:
@@ -142,7 +155,7 @@ rule SV_length_plot_genotypes:
     log:
         "logs/svplot/svlength_{sample}.log"
     shell:
-        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} > {log}"
+        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
 
 
 rule SV_length_plot_calls:
