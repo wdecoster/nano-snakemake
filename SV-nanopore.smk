@@ -7,10 +7,8 @@ def get_samples(wildcards):
 
 rule all:
     input:
-        expand("ngmlr_alignment/{sample}.bam.bai", sample=config["samples"]),
-        expand("sniffles_genotypes/{sample}.vcf", sample=config["samples"]),
-        expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"]),
         expand("SV-plots/SV-length_{sample}.png", sample=config["samples"]),
+        "sniffles_combined/genotypes.vcf"
 
 
 rule ngmlr:
