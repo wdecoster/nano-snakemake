@@ -7,7 +7,8 @@ def get_samples(wildcards):
 
 rule all:
     input:
-        expand("SV-plots/SV-length_{sample}.png", sample=config["samples"]),
+        expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
+        expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
         "sniffles_combined/genotypes.vcf"
 
 
@@ -133,15 +134,27 @@ rule mosdepth_global_plot:
         "python scripts/plot_dist.py {input} -o {output} 2> {log}"
 
 
-rule SV_length_plot:
+rule SV_length_plot_genotypes:
     input:
         "sniffles_genotypes/{sample}.vcf"
     output:
-        "SV-plots/SV-length_{sample}.png"
+        "SV-plots/SV-length_genotypes_{sample}.png"
     log:
         "logs/svplot/svlength_{sample}.log"
     shell:
         "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} > {log}"
+
+
+rule SV_length_plot_calls:
+    input:
+        "sniffles_calls/{sample}.vcf"
+    output:
+        "SV-plots/SV-length_calls_{sample}.png"
+    log:
+        "logs/svplot/svlength_{sample}.log"
+    shell:
+        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} > {log}"
+
 
 # annotate vcf
 # add mosdepth information and plots on called sites
