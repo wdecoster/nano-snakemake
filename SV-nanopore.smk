@@ -109,7 +109,8 @@ rule survivor_genotypes:
 
 rule mosdepth:
     input:
-        bam = "ngmlr_alignment/{sample}.bam"
+        bam = "ngmlr_alignment/{sample}.bam",
+        bai = "ngmlr_alignment/{sample}.bam.bai"
     threads: 4
     output:
         protected("mosdepth/{sample}.mosdepth.dist.txt")
