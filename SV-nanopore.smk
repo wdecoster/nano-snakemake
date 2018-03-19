@@ -166,8 +166,18 @@ rule SV_length_plot_calls:
     log:
         "logs/svplot/svlength_{sample}.log"
     shell:
-        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} > {log}"
+        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
 
+
+rule SV_plot_carriers:
+    input:
+        "sniffles_combined/genotypes.vcf"
+    output:
+        "SV-plots/SV-carriers.png"
+    log:
+        "logs/svplot/svcarriers.log"
+    shell:
+        "python ~/projects/SV-snakemake/scripts/SV-carriers-plot.py {input} {output} 2> {log}"
 
 # annotate vcf
 # add mosdepth information and plots on called sites
