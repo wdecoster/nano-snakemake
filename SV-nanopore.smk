@@ -123,5 +123,15 @@ rule mosdepth:
         "mosdepth --threads {threads} -n --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
 
 
+rule SV_length_plot:
+    input:
+        "sniffles_genotypes/{sample}.vcf"
+    output:
+        "SV-plots/SV-length_{sample}.png"
+    log:
+        "logs/svplot/svlength_{sample}.log"
+    shell:
+        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} > {log}"
+
 # annotate vcf
 # add mosdepth information and plots on called sites
