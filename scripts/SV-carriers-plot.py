@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 def main(vcf, output):
     plt.hist(x=[get_carrier_number(v.gt_types) for v in VCF(vcf)],
-             bins=range(10))
+             bins=range(10),
+             align="left")
     plt.xlabel('Number of carriers')
     plt.ylabel('Number of variants')
     plt.savefig(output)
