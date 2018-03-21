@@ -185,5 +185,31 @@ rule SV_plot_carriers:
     shell:
         "python ~/projects/SV-snakemake/scripts/SV-carriers-plot.py {input} {output} 2> {log}"
 
-# annotate vcf
+
+rule sort_vcf:
+    input:
+        "sniffles_combined/genotypes.vcf"
+    output:
+        temp("sniffles_combined/sorted_genotypes.vcf")
+    log:
+        "logs/sort_vcf/sorting_combined_genotypes.log"
+    threads: 8
+    shell:
+        "vcf-sort --parallel {threads} {input} > {output} 2> {log}"
+
+
+rule annotate_vcf:
+    input:
+        "sniffles_combined/sorted_genotypes.vcf"
+    output:
+        protected("sniffles_combined/annot_genotypes.vcf")
+    log:
+        "logs/annotate_vcf/annotate_genotypes.log"
+    params:
+        conf = "/home/wdecoster/projects/SV-snakemake/configuration/vcfanno_conf.toml"
+    threads: 8
+    shell:
+        "vcfanno -p {threads} {params.conf} {input} > {output} 2> {log}"
+
+
 # add mosdepth information and plots on called sites
