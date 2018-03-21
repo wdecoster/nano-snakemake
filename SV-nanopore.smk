@@ -63,7 +63,10 @@ rule sniffles_genotype:
     log:
         "logs/sniffles_genotype/{sample}.log"
     shell:
-        "sniffles --mapped_reads {input.bam} --vcf {output} --threads {threads} --Ivcf {input.ivcf} 2> {log}"
+        "sniffles --mapped_reads {input.bam} \
+                  --vcf {output} \
+                  --threads {threads} \
+                  --Ivcf {input.ivcf} 2> {log}"
 
 
 rule survivor_calls:
@@ -122,7 +125,10 @@ rule mosdepth:
     log:
         "logs/mosdepth/mosdepth_{sample}.log"
     shell:
-        "mosdepth --threads {threads} -n --by {params.windowsize} mosdepth/{params.prefix} {input} 2> {log}"
+        "mosdepth --threads {threads} \
+                  -n \
+                  --by {params.windowsize} \
+                  mosdepth/{params.prefix} {input} 2> {log}"
 
 
 rule mosdepth_combine:
