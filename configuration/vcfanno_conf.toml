@@ -1,0 +1,5 @@
+[[annotation]]
+file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_full_annotation.bed.gz"
+columns = [4]
+ops = ["uniq"]
+names = ["GENE"]
