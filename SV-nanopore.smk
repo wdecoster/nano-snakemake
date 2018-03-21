@@ -9,7 +9,7 @@ rule all:
     input:
         expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
         expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
-        "sniffles_combined/genotypes.vcf",
+        "sniffles_combined/annot_genotypes.vcf"
         "mosdepth/regions.combined.gz",
 
 
