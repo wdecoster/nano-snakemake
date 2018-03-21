@@ -91,7 +91,7 @@ rule survivor_genotypes:
     input:
         expand("sniffles_genotypes/{sample}.vcf", sample=config["samples"])
     output:
-        protected("sniffles_combined/genotypes.vcf")
+        temp("sniffles_combined/genotypes.vcf")
     params:
         distance = 1000,
         caller_support = 0,
