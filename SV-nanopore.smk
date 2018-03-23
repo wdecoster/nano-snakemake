@@ -120,7 +120,7 @@ rule mosdepth:
         protected("mosdepth/{sample}.mosdepth.dist.txt"),
         protected("mosdepth/{sample}.regions.bed.gz"),
     params:
-        windowsize = 1000,
+        windowsize = 500,
         prefix = "{sample}",
     log:
         "logs/mosdepth/mosdepth_{sample}.log"
