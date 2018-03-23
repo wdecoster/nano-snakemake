@@ -111,6 +111,42 @@ rule survivor_genotypes:
         {params.minimum_size} {output} 2> {log}"
 
 
+rule nanosv:
+    input:
+        bam = "ngmlr_alignment/{sample}.bam",
+        bai = "ngmlr_alignment/{sample}.bam.bai"
+    output:
+        "nanosv/{sample}.vcf"
+    params:
+        bed = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_full_annotation.bed.gz",
+        samtools = "samtools"
+    logs:
+        "logs/nanosv/{sample}.log"
+    shell:
+        "NanoSV --bed {params.bed} -s {samtools} {input} -o {output} 2> {log}"
+
+
+rule survivor_nanosv:
+    input:
+        expand("nanosv/{sample}.vcf", sample=config["samples"])
+    output:
+        temp("nanosv_combined/nanosv.vcf")
+    params:
+        distance = 1000,
+        caller_support = 0,
+        same_type = 1,
+        same_strand = 0,
+        estimate_distance = 0,
+        minimum_size = 0,
+    log:
+        "logs/survivor/combine_nanosv.log"
+    shell:
+        "ls {input} > sniffles_calls/samples.fofn ; \
+        SURVIVOR merge sniffles_calls/samples.fofn {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output} 2> {log}"
+
+
 rule mosdepth:
     input:
         bam = "ngmlr_alignment/{sample}.bam",
