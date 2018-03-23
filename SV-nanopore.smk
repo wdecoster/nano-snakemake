@@ -209,7 +209,7 @@ rule annotate_vcf:
         conf = "/home/wdecoster/projects/SV-snakemake/configuration/vcfanno_conf.toml"
     threads: 8
     shell:
-        "vcfanno -p {threads} {params.conf} {input} > {output} 2> {log}"
+        "vcfanno -ends -p {threads} {params.conf} {input} > {output} 2> {log}"
 
 
 # add mosdepth information and plots on called sites
