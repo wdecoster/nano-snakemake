@@ -1,5 +1,7 @@
 import pandas as pd
 from argparse import ArgumentParser
+import matplotlib
+matplotlib.use('Agg')
 import seaborn as sns
 import matplotlib.pyplot as plt
 
