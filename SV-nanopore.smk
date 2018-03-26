@@ -11,6 +11,7 @@ rule all:
         expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
+        expand("mosdepth/{sample}.regions.bed.gz", sample=config["samples"]),
 
 
 rule ngmlr:
