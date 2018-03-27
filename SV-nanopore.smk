@@ -79,9 +79,9 @@ rule survivor_calls:
         distance = 1000,
         caller_support = 1,
         same_type = 1,
-        same_strand = 0,
-        estimate_distance = 0,
-        minimum_size = 0,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
     log:
         "logs/sniffles/combine_calls.log"
     shell:
@@ -98,11 +98,11 @@ rule survivor_genotypes:
         temp("sniffles_combined/genotypes.vcf")
     params:
         distance = 1000,
-        caller_support = 0,
+        caller_support = -1,
         same_type = 1,
-        same_strand = 0,
-        estimate_distance = 0,
-        minimum_size = 0,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
     log:
         "logs/sniffles/combine_genotypes.log"
     shell:
