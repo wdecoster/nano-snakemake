@@ -12,6 +12,7 @@ rule all:
         expand("mosdepth/{sample}.regions.bed.gz", sample=config["samples"]),
         expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
+        "nanosv_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
 
 
