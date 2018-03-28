@@ -15,6 +15,19 @@ rule all:
         "mosdepth/regions.combined.gz",
 
 
+rule minimap2:
+    input:
+        fq = get_samples,
+        genome = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+    output:
+        "minimap2_alignment/{sample}.bam"
+    threads:
+        8
+    log:
+        "logs/minimap2/{sample}.log"
+    shell:
+        "minimap2 -a -t {threads} {input.genome} {input.fq} | samtools sort -@ {threads} -o {output} - 2> {log}"
+
 rule ngmlr:
     input:
         fq = get_samples,
