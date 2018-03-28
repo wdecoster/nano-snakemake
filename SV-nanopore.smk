@@ -166,7 +166,7 @@ rule mosdepth:
         "mosdepth --threads {threads} \
                   -n \
                   --by {params.windowsize} \
-                  mosdepth/{params.prefix} {input} 2> {log}"
+                  mosdepth/{params.prefix} {input.bam} 2> {log}"
 
 
 rule mosdepth_combine:
