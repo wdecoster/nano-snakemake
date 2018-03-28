@@ -246,7 +246,7 @@ rule sort_vcf:
         "logs/sort_vcf/sorting_combined_genotypes.log"
     threads: 8
     shell:
-        "vcf-sort --parallel {threads} {input} > {output} 2> {log}"
+        "vcf-sort {input} > {output} 2> {log}"
 
 
 rule annotate_vcf:
