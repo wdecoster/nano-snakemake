@@ -99,7 +99,7 @@ rule survivor_genotypes:
         temp("sniffles_combined/genotypes.vcf")
     params:
         distance = 1000,
-        caller_support = -1,
+        caller_support = 0,
         same_type = 1,
         same_strand = -1,
         estimate_distance = -1,
