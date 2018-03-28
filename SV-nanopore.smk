@@ -125,7 +125,7 @@ rule nanosv:
     log:
         "logs/nanosv/{sample}.log"
     shell:
-        "NanoSV --bed {params.bed} -s {samtools} {input} -o {output} 2> {log}"
+        "NanoSV --bed {params.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
 
 
 rule survivor_nanosv:
