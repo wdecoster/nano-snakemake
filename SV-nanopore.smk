@@ -178,7 +178,7 @@ rule mosdepth_combine:
     log:
         "logs/mosdepth/mosdepth_combine.log"
     shell:
-        "python ~/projects/SV-snakemake/scripts/combine_mosdepth.py {input} -o {output} 2> {log}"
+        "python scripts/combine_mosdepth.py {input} -o {output} 2> {log}"
 
 
 rule mosdepth_global_plot:
@@ -200,7 +200,7 @@ rule SV_length_plot:
     log:
         "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
-        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
+        "python scripts/SV-length-plot.py {input} {output} 2> {log}"
 
 
 rule SV_plot_carriers:
@@ -211,7 +211,7 @@ rule SV_plot_carriers:
     log:
         "logs/svplot/svcarriers.log"
     shell:
-        "python ~/projects/SV-snakemake/scripts/SV-carriers-plot.py {input} {output} 2> {log}"
+        "python scripts/SV-carriers-plot.py {input} {output} 2> {log}"
 
 
 rule sort_vcf:
