@@ -9,14 +9,19 @@ rule all:
     input:
         expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
         expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
-        expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
         "nanosv_combined/annot_genotypes.vcf",
+        "all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
 
 rule minimap2:
+    input:
+        expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
+
+
+rule minimap2_align:
     input:
         fq = get_samples,
         genome = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
