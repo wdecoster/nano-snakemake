@@ -47,12 +47,12 @@ rule ngmlr:
 
 rule samtools_index:
     input:
-        "ngmlr_alignment/{sample}.bam"
+        "{aligner}_alignment/{sample}.bam"
     output:
-        "ngmlr_alignment/{sample}.bam.bai"
+        "{aligner}_alignment/{sample}.bam.bai"
     threads: 12
     log:
-        "logs/samtools_index/{sample}.log"
+        "logs/samtools_index/{aligner}_{sample}.log"
     shell:
         "samtools index -@ {threads} {input} 2> {log}"
 
