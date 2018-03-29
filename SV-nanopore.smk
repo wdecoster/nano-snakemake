@@ -33,7 +33,8 @@ rule minimap2_align:
     log:
         "logs/minimap2/{sample}.log"
     shell:
-        "minimap2 -a -t {threads} {input.genome} {input.fq} | samtools sort -@ {threads} -o {output} - 2> {log}"
+        "minimap2 -a -t {threads} {input.genome} {input.fq} | \
+         samtools sort -@ {threads} -o {output} - 2> {log}"
 
 rule ngmlr:
     input:
