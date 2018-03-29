@@ -25,7 +25,7 @@ rule minimap2:
 rule minimap2_align:
     input:
         fq = get_samples,
-        genome = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+        genome = config["genome"]
     output:
         "minimap2_alignment/{sample}.bam"
     threads:
@@ -38,7 +38,7 @@ rule minimap2_align:
 rule ngmlr:
     input:
         fq = get_samples,
-        genome = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+        genome = config["genome"]
     output:
         protected("ngmlr_alignment/{sample}.bam")
     threads:
