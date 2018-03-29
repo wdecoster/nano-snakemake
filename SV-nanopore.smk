@@ -84,55 +84,12 @@ rule sniffles_genotype:
                   --threads {threads} \
                   --Ivcf {input.ivcf} 2> {log}"
 
-
-rule survivor_calls:
-    input:
-        expand("sniffles_calls/{sample}.vcf", sample=config["samples"])
-    output:
-        protected("sniffles_combined/calls.vcf")
-    params:
-        distance = 1000,
-        caller_support = 1,
-        same_type = 1,
-        same_strand = -1,
-        estimate_distance = -1,
-        minimum_size = -1,
-    log:
-        "logs/sniffles/combine_calls.log"
-    shell:
-        "ls {input} > sniffles_calls/samples.fofn ; \
-        SURVIVOR merge sniffles_calls/samples.fofn {params.distance} {params.caller_support} \
-        {params.same_type} {params.same_strand} {params.estimate_distance}  \
-        {params.minimum_size} {output} 2> {log}"
-
-
-rule survivor_genotypes:
-    input:
-        expand("sniffles_genotypes/{sample}.vcf", sample=config["samples"])
-    output:
-        temp("sniffles_combined/genotypes.vcf")
-    params:
-        distance = 1000,
-        caller_support = 0,  # should check with latest version if this should be "-1"
-        same_type = 1,
-        same_strand = -1,
-        estimate_distance = -1,
-        minimum_size = -1,
-    log:
-        "logs/sniffles/combine_genotypes.log"
-    shell:
-        "ls {input} > sniffles_calls/samples.fofn ; \
-        SURVIVOR merge sniffles_calls/samples.fofn {params.distance} {params.caller_support} \
-        {params.same_type} {params.same_strand} {params.estimate_distance}  \
-        {params.minimum_size} {output} 2> {log}"
-
-
 rule nanosv:
     input:
         bam = "ngmlr_alignment/{sample}.bam",
         bai = "ngmlr_alignment/{sample}.bam.bai"
     output:
-        "nanosv/{sample}.vcf"
+        "nanosv_genotypes/{sample}.vcf"
     params:
         bed = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_full_annotation.bed.gz",
         samtools = "samtools"
@@ -142,23 +99,23 @@ rule nanosv:
         "NanoSV --bed {params.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
 
 
-rule survivor_nanosv:
+rule survivor:
     input:
-        expand("nanosv/{sample}.vcf", sample=config["samples"])
+        expand("{{caller}}_{{stage}}/{sample}.vcf", sample=config["samples"])
     output:
-        temp("nanosv_combined/nanosv.vcf")
+        temp("{caller}_combined/{stage}.vcf")
     params:
         distance = 1000,
-        caller_support = 0,
+        caller_support = 1,
         same_type = 1,
-        same_strand = 0,
-        estimate_distance = 0,
-        minimum_size = 0,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
     log:
-        "logs/survivor/combine_nanosv.log"
+        "logs/{caller}/combine_{stage}.log"
     shell:
-        "ls {input} > sniffles_calls/samples.fofn ; \
-        SURVIVOR merge sniffles_calls/samples.fofn {params.distance} {params.caller_support} \
+        "ls {input} > {caller}_{stage}/samples.fofn ; \
+        SURVIVOR merge {caller}_{stage}/samples.fofn {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output} 2> {log}"
 
