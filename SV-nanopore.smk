@@ -124,6 +124,27 @@ rule survivor:
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output} 2> {log}"
 
+rule survivor_all:
+    input:
+        expand("{caller}_genotypes/{sample}.vcf",
+               sample=config["samples"], caller=["sniffles", "nanosv"])
+    output:
+        temp("all_combined/genotypes.vcf")
+    params:
+        distance = 1000,
+        caller_support = 1,
+        same_type = 1,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
+    log:
+        "logs/all/surivor.log"
+    shell:
+        "ls {input} > combined_all/samples.fofn ; \
+        SURVIVOR merge combined_all/samples.fofn {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output} 2> {log}"
+
 
 rule mosdepth:
     input:
