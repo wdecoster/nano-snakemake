@@ -186,11 +186,11 @@ rule SV_plot_carriers:
 
 rule sort_vcf:
     input:
-        "sniffles_combined/genotypes.vcf"
+        "{caller}_combined/genotypes.vcf"
     output:
-        temp("sniffles_combined/sorted_genotypes.vcf")
+        temp("{caller}_combined/sorted_genotypes.vcf")
     log:
-        "logs/sort_vcf/sorting_combined_genotypes.log"
+        "logs/sort_vcf/sorting_{caller}.log"
     threads: 8
     shell:
         "vcf-sort {input} > {output} 2> {log}"
