@@ -68,7 +68,7 @@ rule sniffles_call:
         "ngmlr_alignment/{sample}.bam"
     output:
         protected("sniffles_calls/{sample}.vcf")
-    threads: 24
+    threads: 8
     log:
         "logs/sniffles_call/{sample}.log"
     shell:
@@ -81,7 +81,7 @@ rule sniffles_genotype:
         ivcf = "sniffles_combined/calls.vcf"
     output:
         protected("sniffles_genotypes/{sample}.vcf")
-    threads: 24
+    threads: 8
     log:
         "logs/sniffles_genotype/{sample}.log"
     shell:
