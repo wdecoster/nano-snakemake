@@ -7,8 +7,9 @@ def get_samples(wildcards):
 
 rule all:
     input:
-        expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
-        expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
+        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
         "sniffles_combined/annot_genotypes.vcf",
         "nanosv_combined/annot_genotypes.vcf",
         "all_combined/annot_genotypes.vcf",
@@ -192,11 +193,11 @@ rule mosdepth_global_plot:
 
 rule SV_length_plot:
     input:
-        "sniffles_{stage}/{sample}.vcf"
+        "{caller}_{stage}/{sample}.vcf"
     output:
-        "SV-plots/SV-length_{stage}_{sample}.png"
+        "SV-plots/SV-length_{caller}_{stage}_{sample}.png"
     log:
-        "logs/svplot/svlength_{stage}_{sample}.log"
+        "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
         "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
 
