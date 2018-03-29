@@ -9,8 +9,6 @@ rule all:
     input:
         expand("SV-plots/SV-length_genotypes_{sample}.png", sample=config["samples"]),
         expand("SV-plots/SV-length_calls_{sample}.png", sample=config["samples"]),
-        expand("mosdepth/{sample}.regions.bed.gz", sample=config["samples"]),
-        expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"]),
         expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
         "nanosv_combined/annot_genotypes.vcf",
