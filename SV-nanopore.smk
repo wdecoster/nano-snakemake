@@ -15,6 +15,7 @@ rule all:
         "sniffles_combined/annot_genotypes.vcf",
         "nanosv_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
+        "mosdepth_global_plot/global.html",
 
 
 rule minimap2:
