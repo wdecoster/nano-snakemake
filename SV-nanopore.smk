@@ -117,7 +117,7 @@ rule survivor:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{caller}/combine_{stage}.log"
+        "logs/{caller}/surivor_{stage}.log"
     shell:
         "ls {input} > {caller}_{stage}/samples.fofn ; \
         SURVIVOR merge {caller}_{stage}/samples.fofn {params.distance} {params.caller_support} \
