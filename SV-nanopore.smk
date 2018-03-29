@@ -108,7 +108,8 @@ rule survivor:
     input:
         expand("{{caller}}_{{stage}}/{sample}.vcf", sample=config["samples"])
     output:
-        temp("{caller}_combined/{stage}.vcf")
+        vcf = temp("{caller}_combined/{stage}.vcf"),
+        fofn = temp("{caller}_{stage}/samples.fofn")
     params:
         distance = 1000,
         caller_support = 1,
@@ -119,8 +120,8 @@ rule survivor:
     log:
         "logs/{caller}/surivor_{stage}.log"
     shell:
-        "ls {input} > {caller}_{stage}/samples.fofn ; \
-        SURVIVOR merge {caller}_{stage}/samples.fofn {params.distance} {params.caller_support} \
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output} 2> {log}"
 
@@ -129,7 +130,8 @@ rule survivor_all:
         expand("{caller}_genotypes/{sample}.vcf",
                sample=config["samples"], caller=["sniffles", "nanosv"])
     output:
-        temp("all_combined/genotypes.vcf")
+        vcf = temp("all_combined/genotypes.vcf"),
+        fofn = temp("all_combined/samples.fofn")
     params:
         distance = 1000,
         caller_support = 1,
@@ -140,10 +142,10 @@ rule survivor_all:
     log:
         "logs/all/surivor.log"
     shell:
-        "ls {input} > combined_all/samples.fofn ; \
-        SURVIVOR merge combined_all/samples.fofn {params.distance} {params.caller_support} \
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
-        {params.minimum_size} {output} 2> {log}"
+        {params.minimum_size} {output.vcf} 2> {log}"
 
 
 rule mosdepth:
