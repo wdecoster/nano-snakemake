@@ -198,11 +198,11 @@ rule sort_vcf:
 
 rule annotate_vcf:
     input:
-        "sniffles_combined/sorted_genotypes.vcf"
+        "{caller}_combined/sorted_genotypes.vcf"
     output:
-        protected("sniffles_combined/annot_genotypes.vcf")
+        protected("{caller}_combined/annot_genotypes.vcf")
     log:
-        "logs/annotate_vcf/annotate_genotypes.log"
+        "logs/annotate_vcf/annotate_{caller}.log"
     params:
         conf = "/home/wdecoster/projects/SV-snakemake/configuration/vcfanno_conf.toml"
     threads: 8
