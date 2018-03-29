@@ -207,24 +207,13 @@ rule mosdepth_global_plot:
         "python scripts/plot_dist.py {input} -o {output} 2> {log}"
 
 
-rule SV_length_plot_genotypes:
+rule SV_length_plot:
     input:
-        "sniffles_genotypes/{sample}.vcf"
+        "sniffles_{stage}/{sample}.vcf"
     output:
-        "SV-plots/SV-length_genotypes_{sample}.png"
+        "SV-plots/SV-length_{stage}_{sample}.png"
     log:
-        "logs/svplot/svlength_{sample}.log"
-    shell:
-        "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
-
-
-rule SV_length_plot_calls:
-    input:
-        "sniffles_calls/{sample}.vcf"
-    output:
-        "SV-plots/SV-length_calls_{sample}.png"
-    log:
-        "logs/svplot/svlength_{sample}.log"
+        "logs/svplot/svlength_{stage}_{sample}.log"
     shell:
         "python ~/projects/SV-snakemake/scripts/SV-length-plot.py {input} {output} 2> {log}"
 
