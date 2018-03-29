@@ -97,7 +97,7 @@ rule nanosv:
     output:
         "nanosv_genotypes/{sample}.vcf"
     params:
-        bed = "/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_full_annotation.bed.gz",
+        bed = config["annotbed"],
         samtools = "samtools"
     log:
         "logs/nanosv/{sample}.log"
