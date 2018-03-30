@@ -2,3 +2,9 @@ samples:
     sampleA: /path/to/sampleC/fastq
     sampleB: /path/to/sampleC/fastq
     sampleC: /path/to/sampleC/fastq
+
+genome:
+    /path/to/database/genome.fa.gz
+
+annotbed:
+    /path/to/database/annotation.bed.gz
