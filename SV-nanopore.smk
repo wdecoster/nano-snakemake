@@ -1,18 +1,27 @@
 configfile: "config.yaml"
 
+from glob import glob
+
 
 def get_samples(wildcards):
     return config["samples"][wildcards.sample]
 
 
+def get_reference_chromosomes(wildcards):
+    return [i.split('_')[-1].split('.')[0]
+            for i in glob("ngmlr_alignment/" + wildcards.sample + ".REF_*")]
+
+
 rule all:
     input:
-        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-               sample=config["samples"],
-               caller=["sniffles", "nanosv"]),
+        # expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+        #        sample=config["samples"],
+        #        caller=["sniffles", "nanosv"]),
+        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
+               sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
-        "nanosv_combined/annot_genotypes.vcf",
-        "all_combined/annot_genotypes.vcf",
+        # "nanosv_combined/annot_genotypes.vcf",
+        # "all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
@@ -91,12 +100,23 @@ rule sniffles_genotype:
                   --threads {threads} \
                   --Ivcf {input.ivcf} 2> {log}"
 
+rule split_bam:
+    input:
+        "ngmlr_alignment/{sample}.bam"
+    output:
+        temp("ngmlr_alignment/d2337.REF_chr1.bam")
+    log:
+        "logs/bamtools_split/{sample}.log"
+    shell:
+        "bamtools split -in {input} -reference"
+
+
 rule nanosv:
     input:
-        bam = "ngmlr_alignment/{sample}.bam",
+        bam = "ngmlr_alignment/{sample}.REF_{chromosome}.bam",
         bai = "ngmlr_alignment/{sample}.bam.bai"
     output:
-        "nanosv_genotypes/{sample}.vcf"
+        temp("nanosv_genotypes/{sample}_{chromosome}.vcf")
     params:
         bed = config["annotbed"],
         samtools = "samtools"
@@ -105,6 +125,16 @@ rule nanosv:
     shell:
         "NanoSV --bed {params.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
 
+
+rule cat_vcfs:
+    input:
+        "nanosv_genotypes/{sample}_{chromosome}.vcf"
+    output:
+        "nanosv_genotypes/{sample}.vcf"
+    log:
+        "logs/vcf-concat/{sample}.log"
+    shell:
+        "vcf-concat {input} > {output} 2> {log}"
 
 rule survivor:
     input:
