@@ -81,7 +81,7 @@ rule sniffles_genotype:
         bam = "ngmlr_alignment/{sample}.bam",
         ivcf = "sniffles_combined/calls.vcf"
     output:
-        protected("sniffles_genotypes/{sample}.vcf")
+        "sniffles_genotypes/{sample}.vcf"
     threads: 8
     log:
         "logs/sniffles_genotype/{sample}.log"
@@ -185,7 +185,7 @@ rule mosdepth_global_plot:
     input:   # change if mosdepth 0.2.2
         expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"])
     output:
-        protected("mosdepth_global_plot/global.html")
+        "mosdepth_global_plot/global.html"
     log:
         "logs/mosdepth/mosdepth_global_plot.log"
     shell:
@@ -230,7 +230,7 @@ rule annotate_vcf:
     input:
         "{caller}_combined/sorted_genotypes.vcf"
     output:
-        protected("{caller}_combined/annot_genotypes.vcf")
+        "{caller}_combined/annot_genotypes.vcf"
     log:
         "logs/annotate_vcf/annotate_{caller}.log"
     params:
