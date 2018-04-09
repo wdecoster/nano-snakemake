@@ -20,7 +20,7 @@ def main():
         sample = f.replace(".mosdepth.global.dist.txt", "")
         gen = (x.rstrip().split("\t") for x in open(f))
         for chrom, data in it.groupby(gen, itemgetter(0)):
-            if chrom.startswith("GL"):
+            if chrom.startswith("GL") or chrom.startswith("chrUn"):
                 continue
             chroms[chrom] = True
             xs, ys = [], []
