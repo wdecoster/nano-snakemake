@@ -8,21 +8,16 @@ def get_samples(wildcards):
     return config["samples"][wildcards.sample]
 
 
-def get_reference_chromosomes(wildcards):
-    return [i.split('_')[-1].split('.')[0]
-            for i in glob("ngmlr_alignment/" + wildcards.sample + ".REF_*")]
-
-
 rule all:
     input:
-        # expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-        #        sample=config["samples"],
-        #        caller=["sniffles", "nanosv"]),
-        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
-               sample=config["samples"]),
+        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
+        # expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
+        #        sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
-        # "nanosv_combined/annot_genotypes.vcf",
-        # "all_combined/annot_genotypes.vcf",
+        "nanosv_combined/annot_genotypes.vcf",
+        "all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
@@ -105,7 +100,7 @@ rule split_bam:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
-        temp("ngmlr_alignment/d2337.REF_chr1.bam")
+        dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam")
     log:
         "logs/bamtools_split/{sample}.log"
     shell:
@@ -114,10 +109,10 @@ rule split_bam:
 
 rule nanosv:
     input:
-        bam = "ngmlr_alignment/{sample}.REF_{chromosome}.bam",
-        bai = "ngmlr_alignment/{sample}.bam.bai"
+        bam = dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam"),
+        bai = dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam.bai")
     output:
-        temp("nanosv_genotypes/{sample}_{chromosome}.vcf")
+        dynamic("split_nanosv_genotypes/{sample}_{chromosome}.vcf")
     params:
         bed = config["annotbed"],
         samtools = "samtools"
@@ -129,7 +124,7 @@ rule nanosv:
 
 rule cat_vcfs:
     input:
-        "nanosv_genotypes/{sample}_{chromosome}.vcf"
+        dynamic("split_nanosv_genotypes/{sample}_{chromosome}.vcf")
     output:
         "nanosv_genotypes/{sample}.vcf"
     log:
