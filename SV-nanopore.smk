@@ -221,7 +221,8 @@ rule mosdepth_global_plot:
     log:
         "logs/mosdepth/mosdepth_global_plot.log"
     shell:
-        os.path.join(workflow.basedir, "scripts/plot_dist.py") + " {input} -o {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/mosdepth_plot-dist.py") + \
+            " {input} -o {output} 2> {log}"
 
 
 rule SV_length_plot:
@@ -243,7 +244,7 @@ rule SV_plot_carriers:
     log:
         "logs/svplot/svcarriers.log"
     shell:
-        os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py"), + \
+        os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py") + \
             " {input} {output} 2> {log}"
 
 
