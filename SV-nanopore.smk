@@ -1,6 +1,7 @@
 configfile: "config.yaml"
 
 from glob import glob
+import os
 
 
 def get_samples(wildcards):
@@ -208,7 +209,8 @@ rule mosdepth_combine:
     log:
         "logs/mosdepth/mosdepth_combine.log"
     shell:
-        "python scripts/combine_mosdepth.py {input} -o {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/combine_mosdepth.py") + \
+            " {input} -o {output} 2> {log}"
 
 
 rule mosdepth_global_plot:
@@ -219,7 +221,7 @@ rule mosdepth_global_plot:
     log:
         "logs/mosdepth/mosdepth_global_plot.log"
     shell:
-        "python scripts/plot_dist.py {input} -o {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/plot_dist.py") + " {input} -o {output} 2> {log}"
 
 
 rule SV_length_plot:
@@ -230,7 +232,7 @@ rule SV_length_plot:
     log:
         "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
-        "python scripts/SV-length-plot.py {input} {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/SV-length-plot.py") + " {input} {output} 2> {log}"
 
 
 rule SV_plot_carriers:
@@ -241,7 +243,8 @@ rule SV_plot_carriers:
     log:
         "logs/svplot/svcarriers.log"
     shell:
-        "python scripts/SV-carriers-plot.py {input} {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py"), + \
+            " {input} {output} 2> {log}"
 
 
 rule sort_vcf:

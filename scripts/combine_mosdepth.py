@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import pandas as pd
 from argparse import ArgumentParser
 

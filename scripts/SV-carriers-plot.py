@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 from cyvcf2 import VCF
 import sys
 import matplotlib
