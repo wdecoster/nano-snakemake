@@ -156,7 +156,7 @@ rule survivor:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
-        {params.minimum_size} {output} 2> {log}"
+        {params.minimum_size} {output.vcf} 2> {log}"
 
 rule survivor_all:
     input:
