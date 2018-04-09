@@ -186,8 +186,8 @@ rule mosdepth:
         bam = "ngmlr_alignment/{sample}.bam",
         bai = "ngmlr_alignment/{sample}.bam.bai"
     threads: 4
-    output:  # change if mosdepth 0.2.2
-        protected("mosdepth/{sample}.mosdepth.dist.txt"),
+    output:
+        protected("mosdepth/{sample}.mosdepth.global.dist.txt"),
         protected("mosdepth/{sample}.regions.bed.gz"),
     params:
         windowsize = 500,
@@ -214,8 +214,8 @@ rule mosdepth_combine:
 
 
 rule mosdepth_global_plot:
-    input:   # change if mosdepth 0.2.2
-        expand("mosdepth/{sample}.mosdepth.dist.txt", sample=config["samples"])
+    input:
+        expand("mosdepth/{sample}.mosdepth.global.dist.txt", sample=config["samples"])
     output:
         "mosdepth_global_plot/global.html"
     log:
