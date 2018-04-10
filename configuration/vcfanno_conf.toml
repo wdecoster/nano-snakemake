@@ -3,3 +3,9 @@ file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_full_anno
 columns = [4]
 ops = ["uniq"]
 names = ["GENE"]
+
+[[annotation]]
+file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_genomicSuperDups.bed.gz"
+columns = [4]
+ops = ["uniq"]
+names = ["SEGDUP"]
