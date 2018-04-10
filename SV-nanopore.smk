@@ -10,14 +10,14 @@ def get_samples(wildcards):
 
 rule all:
     input:
-        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-               sample=config["samples"],
-               caller=["sniffles", "nanosv"]),
-        # expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
-        #        sample=config["samples"]),
+        # expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+        #       sample=config["samples"],
+        #       caller=["sniffles", "nanosv"]),
+        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
+               sample=config["samples"]),
         "sniffles_combined/annot_genotypes.vcf",
-        "nanosv_combined/annot_genotypes.vcf",
-        "all_combined/annot_genotypes.vcf",
+        #"nanosv_combined/annot_genotypes.vcf",
+        #"all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
