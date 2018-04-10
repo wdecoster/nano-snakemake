@@ -80,7 +80,7 @@ rule sniffles_call:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
-        protected("sniffles_calls/{sample}.vcf")
+        "sniffles_calls/{sample}.vcf"
     threads: 8
     log:
         "logs/sniffles_call/{sample}.log"
