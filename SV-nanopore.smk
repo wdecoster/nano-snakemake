@@ -1,23 +1,30 @@
-configfile: "config.yaml"
-
-from glob import glob
 import os
+
+configfile: "config.yaml"
 
 
 def get_samples(wildcards):
     return config["samples"][wildcards.sample]
 
 
+def get_chromosomes(genome):
+    fai = genome + ".fai"
+    if not os.path.isfile(fai):
+        sys.exit("Fasta index {} not found".format(fai))
+    return [i.split('\t')[0] for i in open(fai)]
+
+
+CHROMOSOMES = get_chromosomes(config["genome"])
+
+
 rule all:
     input:
-        # expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-        #       sample=config["samples"],
-        #       caller=["sniffles", "nanosv"]),
-        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png",
-               sample=config["samples"]),
+        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
         "sniffles_combined/annot_genotypes.vcf",
-        #"nanosv_combined/annot_genotypes.vcf",
-        #"all_combined/annot_genotypes.vcf",
+        "nanosv_combined/annot_genotypes.vcf",
+        "all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
@@ -100,7 +107,7 @@ rule split_bam:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
-        dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam")
+        expand("split_ngmlr_alignment/{{sample}}.REF_{chromosome}.bam", chromosome=CHROMOSOMES)
     log:
         "logs/bamtools_split/{sample}.log"
     shell:
@@ -109,10 +116,10 @@ rule split_bam:
 
 rule nanosv:
     input:
-        bam = dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam"),
-        bai = dynamic("split_ngmlr_alignment/{sample}.REF_{chromosome}.bam.bai")
+        bam = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam",
+        bai = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam.bai"
     output:
-        dynamic("split_nanosv_genotypes/{sample}_{chromosome}.vcf")
+        "split_nanosv_genotypes/{sample}_{chromosome}.vcf"
     params:
         bed = config["annotbed"],
         samtools = "samtools"
@@ -124,7 +131,7 @@ rule nanosv:
 
 rule cat_vcfs:
     input:
-        dynamic("split_nanosv_genotypes/{sample}_{chromosome}.vcf")
+        expand("split_nanosv_genotypes/{{sample}}_{chromosome}.vcf", chromosome=CHROMOSOMES)
     output:
         "nanosv_genotypes/{sample}.vcf"
     log:
