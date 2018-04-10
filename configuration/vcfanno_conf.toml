@@ -5,7 +5,7 @@ ops = ["uniq"]
 names = ["GENE"]
 
 [[annotation]]
-file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_genomicSuperDups.bed.gz"
+file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_genomicSuperDups.bed.bgz"
 columns = [4]
 ops = ["uniq"]
 names = ["SEGDUP"]
