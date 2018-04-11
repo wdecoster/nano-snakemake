@@ -117,23 +117,28 @@ rule sniffles_genotype:
                   --threads {threads} \
                   --Ivcf {input.ivcf} 2> {log}"
 
-rule split_bam:
+rule get_chromosome_from_bam:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
-        expand("split_ngmlr_alignment/{{sample}}.REF_{chromosome}.bam", chromosome=CHROMOSOMES)
+        bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
+        # bai = "split_ngmlr_alignment/{sample}_{chromosome}.bam.bai"
+    threads: 4
+    params:
+        chrom = "{chromosome}"
     log:
-        "logs/bamtools_split/{sample}.log"
+        "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
-        "bamtools split -in {input} -reference"
+        "samtools view - @ {threads} {input} {params.chrom} - o {output.bam}"
+        # && samtools index -@ {threads} {output.bam}"
 
 
 rule nanosv_call:
     input:
-        bam = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam",
-        bai = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam.bai"
+        bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
+        bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai"
     output:
-        "split_nanosv_genotypes/{sample}_{chromosome}.vcf"
+        "split_nanosv_genotypes/{sample}-{chromosome}.vcf"
     params:
         bed = config["annotbed"],
         samtools = "samtools"
@@ -145,7 +150,7 @@ rule nanosv_call:
 
 rule cat_vcfs:
     input:
-        expand("split_nanosv_genotypes/{{sample}}_{chromosome}.vcf", chromosome=CHROMOSOMES)
+        expand("split_nanosv_genotypes/{{sample}}-{chromosome}.vcf", chromosome=CHROMOSOMES)
     output:
         "nanosv_genotypes/{sample}.vcf"
     log:
