@@ -28,6 +28,20 @@ rule all:
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
+rule sniffles:
+    input:
+        "sniffles_combined/annot_genotypes.vcf",
+        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png", sample=config["samples"]),
+
+rule nanosv:
+    input:
+        "nanosv_combined/annot_genotypes.vcf",
+        expand("SV-plots/SV-length_nanosv_genotypes_{sample}.png", sample=config["samples"]),
+
+rule mosdepth:
+    input:
+        "mosdepth/regions.combined.gz",
+        "mosdepth_global_plot/global.html",
 
 rule minimap2:
     input:
@@ -114,7 +128,7 @@ rule split_bam:
         "bamtools split -in {input} -reference"
 
 
-rule nanosv:
+rule nanosv_call:
     input:
         bam = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam",
         bai = "split_ngmlr_alignment/{sample}.REF_{chromosome}.bam.bai"
@@ -183,7 +197,7 @@ rule survivor_all:
         {params.minimum_size} {output.vcf} 2> {log}"
 
 
-rule mosdepth:
+rule mosdepth_get:
     input:
         bam = "ngmlr_alignment/{sample}.bam",
         bai = "ngmlr_alignment/{sample}.bam.bai"
