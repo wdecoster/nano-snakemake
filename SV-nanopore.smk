@@ -167,7 +167,7 @@ rule survivor:
         vcf = temp("{caller}_combined/{stage}.vcf"),
         fofn = temp("{caller}_{stage}/samples.fofn")
     params:
-        distance = 1000,
+        distance = 500,
         caller_support = 1,
         same_type = 1,
         same_strand = -1,
@@ -189,7 +189,7 @@ rule survivor_all:
         vcf = temp("all_combined/genotypes.vcf"),
         fofn = temp("all_combined/samples.fofn")
     params:
-        distance = 1000,
+        distance = 500,
         caller_support = 1,
         same_type = 1,
         same_strand = -1,
