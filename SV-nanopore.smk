@@ -22,6 +22,7 @@ rule all:
         expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
                caller=["sniffles", "nanosv"]),
+        "SV-plots/SV-sniffles_carriers.png"
         "sniffles_combined/annot_genotypes.vcf",
         "nanosv_combined/annot_genotypes.vcf",
         "all_combined/annot_genotypes.vcf",
@@ -32,6 +33,7 @@ rule sniffles:
     input:
         "sniffles_combined/annot_genotypes.vcf",
         expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png", sample=config["samples"]),
+        "SV-plots/SV-sniffles_carriers.png"
 
 rule nanosv:
     input:
@@ -261,7 +263,7 @@ rule SV_plot_carriers:
     input:
         "sniffles_combined/genotypes.vcf"
     output:
-        "SV-plots/SV-carriers.png"
+        "SV-plots/SV-sniffles_carriers.png"
     log:
         "logs/svplot/svcarriers.log"
     shell:
