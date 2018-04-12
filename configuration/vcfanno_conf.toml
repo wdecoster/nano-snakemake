@@ -15,3 +15,9 @@ file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/GRCh38_genomicSu
 columns = [4]
 ops = ["uniq"]
 names = ["SEGDUP"]
+
+[[annotation]]
+file="/home/wdecoster/databases/Homo_sapiens/GRCh38_recommended/dgv_GRCh38.bed.bgz"
+columns = [4]
+ops = ["uniq"]
+names = ["DGV"]
