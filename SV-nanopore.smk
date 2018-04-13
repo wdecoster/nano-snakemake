@@ -124,15 +124,12 @@ rule samtools_split:
         "ngmlr_alignment/{sample}.bam"
     output:
         bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
-        # bai = "split_ngmlr_alignment/{sample}_{chromosome}.bam.bai"
     params:
         chrom = "{chromosome}"
     log:
         "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
         "samtools view {input} {params.chrom} -o {output.bam} 2> {log}"
-        # && samtools index -@ {threads} {output.bam}"
-
 
 rule split_bed:
     input:
