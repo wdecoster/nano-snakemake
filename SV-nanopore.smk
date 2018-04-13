@@ -85,7 +85,7 @@ rule samtools_index:
         "{aligner}_alignment/{sample}.bam"
     output:
         "{aligner}_alignment/{sample}.bam.bai"
-    threads: 6
+    threads: 4
     log:
         "logs/samtools_index/{aligner}_{sample}.log"
     shell:
@@ -134,19 +134,30 @@ rule samtools_split:
         # && samtools index -@ {threads} {output.bam}"
 
 
+rule split_bed:
+    input:
+        bed = config["annotbed"]
+    output:
+        expand("split_annotation_bed/{chromosome}.bed", chromosome=CHROMOSOMES)
+    log:
+        "logs/split_bed/split_annotation.log"
+    shell:
+        "awk '{print $0 >> $1".bed"}' {input.bed} 2> {log}"
+
+
 rule nanosv_call:
     input:
         bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
-        bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai"
+        bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai",
+        bed = "split_annotation_bed/{chromosome}.bed"
     output:
         "split_nanosv_genotypes/{sample}-{chromosome}.vcf"
     params:
-        bed = config["annotbed"],
         samtools = "samtools"
     log:
         "logs/nanosv/{sample}-{chromosome}.log"
     shell:
-        "NanoSV --bed {params.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
+        "NanoSV --bed {input.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
 
 
 rule cat_vcfs:
