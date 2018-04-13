@@ -125,13 +125,12 @@ rule get_chromosome_from_bam:
     output:
         bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
         # bai = "split_ngmlr_alignment/{sample}_{chromosome}.bam.bai"
-    threads: 4
     params:
         chrom = "{chromosome}"
     log:
         "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
-        "samtools view - @ {threads} {input} {params.chrom} - o {output.bam}"
+        "samtools view {input} {params.chrom} -o {output.bam}"
         # && samtools index -@ {threads} {output.bam}"
 
 
