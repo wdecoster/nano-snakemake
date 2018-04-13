@@ -85,7 +85,7 @@ rule samtools_index:
         "{aligner}_alignment/{sample}.bam"
     output:
         "{aligner}_alignment/{sample}.bam.bai"
-    threads: 12
+    threads: 6
     log:
         "logs/samtools_index/{aligner}_{sample}.log"
     shell:
