@@ -130,7 +130,7 @@ rule get_chromosome_from_bam:
     log:
         "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
-        "samtools view {input} {params.chrom} -o {output.bam}"
+        "samtools view {input} {params.chrom} -o {output.bam} 2> {log}"
         # && samtools index -@ {threads} {output.bam}"
 
 
