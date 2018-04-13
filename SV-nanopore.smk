@@ -144,7 +144,7 @@ rule nanosv_call:
         bed = config["annotbed"],
         samtools = "samtools"
     log:
-        "logs/nanosv/{sample}.log"
+        "logs/nanosv/{sample}-{chromosome}.log"
     shell:
         "NanoSV --bed {params.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
 
