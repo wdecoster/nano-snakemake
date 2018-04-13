@@ -119,7 +119,7 @@ rule sniffles_genotype:
                   --threads {threads} \
                   --Ivcf {input.ivcf} 2> {log}"
 
-rule get_chromosome_from_bam:
+rule samtools split:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
