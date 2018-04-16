@@ -11,7 +11,7 @@ def get_chromosomes(genome):
     fai = genome + ".fai"
     if not os.path.isfile(fai):
         sys.exit("Fasta index {} not found".format(fai))
-    return [i.split('\t')[0] for i in open(fai)]
+    return [i.split('\t')[0] for i in open(fai) if not i.split('\t') == "chrEBV"]
 
 
 CHROMOSOMES = get_chromosomes(config["genome"])
