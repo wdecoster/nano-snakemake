@@ -148,14 +148,15 @@ rule split_bed:
     log:
         "logs/split_bed/split_annotation.log"
     shell:
-        "awk '{print $0 >> $1".bed"}' {input.bed} 2> {log}"
+        '''awk '{print $0 >> $1".bed"}' {input.bed} 2> {log}'''
 
 
 rule nanosv_call:
     input:
         bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
         bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai",
-        bed = "split_annotation_bed/{chromosome}.bed"
+        bed = config["annotbed"]
+        #bed = "split_annotation_bed/{chromosome}.bed"
     output:
         "split_nanosv_genotypes/{sample}-{chromosome}.vcf"
     params:
