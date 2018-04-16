@@ -132,13 +132,13 @@ rule samtools_split:
     input:
         "ngmlr_alignment/{sample}.bam"
     output:
-        bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
+        temp("split_ngmlr_alignment/{sample}-{chromosome}.bam")
     params:
         chrom = "{chromosome}"
     log:
         "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
-        "samtools view {input} {params.chrom} -o {output.bam} 2> {log}"
+        "samtools view {input} {params.chrom} -o {output} 2> {log}"
 
 rule split_bed:
     input:
@@ -158,7 +158,7 @@ rule nanosv_call:
         bed = config["annotbed"]
         #bed = "split_annotation_bed/{chromosome}.bed"
     output:
-        "split_nanosv_genotypes/{sample}-{chromosome}.vcf"
+        temp("split_nanosv_genotypes/{sample}-{chromosome}.vcf")
     params:
         samtools = "samtools"
     log:
