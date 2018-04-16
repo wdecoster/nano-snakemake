@@ -6,18 +6,18 @@ A set of [snakemake](https://snakemake.readthedocs.io/en/stable/) pipelines for 
 
 
 - SV analysis pipeline using:
- - [ngmlr](https://github.com/philres/ngmlr)
- - [sniffles](https://github.com/fritzsedlazeck/Sniffles)
- - [NanoSV](https://github.com/mroosmalen/nanosv)
- - [survivor](https://github.com/fritzsedlazeck/SURVIVOR)
- - [mosdepth](https://github.com/brentp/mosdepth)
- - [minimap2](https://github.com/lh3/minimap2)
- - [cyvcf2](https://github.com/brentp/cyvcf2)
- - [vcfanno](https://github.com/brentp/vcfanno)
- - [vcftools](https://vcftools.github.io/index.html)
- - [samtools](https://github.com/samtools/samtools)
- - [matplotlib](https://github.com/matplotlib/matplotlib)
- - [seaborn](https://github.com/mwaskom/seaborn)
+  - [ngmlr](https://github.com/philres/ngmlr)
+  - [sniffles](https://github.com/fritzsedlazeck/Sniffles)
+  - [NanoSV](https://github.com/mroosmalen/nanosv)
+  - [survivor](https://github.com/fritzsedlazeck/SURVIVOR)
+  - [mosdepth](https://github.com/brentp/mosdepth)
+  - [minimap2](https://github.com/lh3/minimap2)
+  - [cyvcf2](https://github.com/brentp/cyvcf2)
+  - [vcfanno](https://github.com/brentp/vcfanno)
+  - [vcftools](https://vcftools.github.io/index.html)
+  - [samtools](https://github.com/samtools/samtools)
+  - [matplotlib](https://github.com/matplotlib/matplotlib)
+  - [seaborn](https://github.com/mwaskom/seaborn)
 - methylation analysis using nanopolish [not yet written]
 
 
