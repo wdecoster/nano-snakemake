@@ -25,7 +25,10 @@ def main(vcf):
     for i_sample, i_values in identifiers.items():
         for j_sample, j_values in identifiers.items():
             df.loc[i_sample, j_sample] = len(i_values & j_values)
-    proper_names = [i.split('/')[1].split('.')[0] for i in samples]
+    try:
+        proper_names = [i.split('/')[1].split('.')[0] for i in samples]
+    except IndexError:
+        proper_names = samples
     sns.heatmap(data=df,
                 annot=True,
                 fmt="d",
