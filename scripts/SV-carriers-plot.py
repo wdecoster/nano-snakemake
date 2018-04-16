@@ -8,10 +8,12 @@ import matplotlib.pyplot as plt
 
 
 def main(vcf, output):
-    plt.hist(x=[get_carrier_number(v.gt_types) for v in VCF(vcf)],
+    variants = VCF(vcf)
+    plt.hist(x=[get_carrier_number(v.gt_types) for v in variants],
              bins=range(10),
              align="left")
     plt.xlabel('Number of carriers')
+    plt.xticks(range(1, len(variants.samples) + 1), range(1, len(variants.samples) + 1))
     plt.ylabel('Number of variants')
     plt.savefig(output)
 
