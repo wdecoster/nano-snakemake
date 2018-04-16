@@ -31,9 +31,8 @@ rule all:
         expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
                caller=["sniffles", "nanosv"]),
-        "SV-plots/SV-sniffles_carriers.png"
-        "sniffles_combined/annot_genotypes.vcf",
-        "nanosv_combined/annot_genotypes.vcf",
+        expand("SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
+        expand("{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
         "all_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
@@ -48,6 +47,7 @@ rule nanosv:
     input:
         "nanosv_combined/annot_genotypes.vcf",
         expand("SV-plots/SV-length_nanosv_genotypes_{sample}.png", sample=config["samples"]),
+        "SV-plots/SV-nanosv_carriers.png"
 
 rule mosdepth:
     input:
@@ -278,11 +278,11 @@ rule SV_length_plot:
 
 rule SV_plot_carriers:
     input:
-        "sniffles_combined/genotypes.vcf"
+        "{caller}_combined/annot_genotypes.vcf"
     output:
-        "SV-plots/SV-sniffles_carriers.png"
+        "SV-plots/SV-{caller}_carriers.png"
     log:
-        "logs/svplot/svcarriers.log"
+        "logs/svplot/svcarriers_{caller}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py") + \
             " {input} {output} 2> {log}"
