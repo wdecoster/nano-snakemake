@@ -17,7 +17,7 @@ def main(vcf, output):
 
 
 def get_carrier_number(gt_array):
-    return sum(gt_array > 0)
+    return sum(1 for i in gt_array if i in [1, 3])
 
 
 if __name__ == '__main__':
