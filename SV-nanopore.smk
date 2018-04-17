@@ -85,7 +85,7 @@ rule ngmlr:
         "logs/ngmlr/{sample}.log"
     shell:
         "zcat {input.fq}/*.fastq.gz | \
-         ngmlr -x ont -t {threads} -r {input.genome} | \
+         ngmlr --presets ont -t {threads} -r {input.genome} | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
 
