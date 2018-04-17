@@ -34,8 +34,10 @@ rule all:
         expand("SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
         expand("{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
         "all_combined/annot_genotypes.vcf",
+        "high_confidence_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
+
 
 rule sniffles:
     input:
@@ -215,6 +217,48 @@ rule survivor_all:
         minimum_size = -1,
     log:
         "logs/all/surivor.log"
+    shell:
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output.vcf} 2> {log}"
+
+rule survivor_pairwise:
+    input:
+        expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
+    output:
+        vcf = temp("high_confidence/{sample}.vcf"),
+        fofn = temp("high_confidence/{sample}.fofn")
+    params:
+        distance = 500,
+        caller_support = 2,
+        same_type = 1,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
+    log:
+        "logs/high_confidence/surivor_pairwise_{sample}.log"
+    shell:
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output.vcf} 2> {log}"
+
+rule survivor_high_confidence:
+    input:
+        expand("high_confidence/{sample}.vcf", sample=config["samples"])
+    output:
+        vcf = temp("high_confidence_combined/genotypes.vcf"),
+        fofn = temp("high_confidence_combined/samples.fofn")
+    params:
+        distance = 500,
+        caller_support = 1,
+        same_type = 1,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
+    log:
+        "logs/high_confidence_combined/surivor_high_confidence.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
