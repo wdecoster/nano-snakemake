@@ -201,7 +201,8 @@ rule survivor:
 rule survivor_all:
     input:
         expand("{caller}_genotypes/{sample}.vcf",
-               sample=config["samples"], caller=["sniffles", "nanosv"])
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"])
     output:
         vcf = temp("all_combined/genotypes.vcf"),
         fofn = temp("all_combined/samples.fofn")
