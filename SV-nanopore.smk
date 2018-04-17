@@ -33,6 +33,7 @@ rule all:
                caller=["sniffles", "nanosv"]),
         expand("SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
         expand("{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
+        "alignment_stats/ngmlr.txt",
         "all_combined/annot_genotypes.vcf",
         "high_confidence_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
@@ -59,7 +60,10 @@ rule mosdepth:
 rule minimap2:
     input:
         expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
+        "alignment_stats/minimap2.txt",
 
+
+#######################################################################################
 
 rule minimap2_align:
     input:
@@ -102,6 +106,18 @@ rule samtools_index:
     shell:
         "samtools index -@ {threads} {input} 2> {log}"
 
+
+rule alignment_stats:
+    input:
+        bam = expand("{{aligner}}_alignment/{sample}.bam", sample=config["samples"]),
+        bai = expand("{{aligner}}_alignment/{sample}.bam.bai", sample=config["samples"])
+    output:
+        "alignment_stats/{aligner}.txt"
+    log:
+        "logs/alignment_stats/{aligner}.log"
+    shell:
+        os.path.join(workflow.basedir, "scripts/alignment_stats.py") + \
+            " -o {output} {input.bam} 2> {log}"
 
 rule sniffles_call:
     input:
