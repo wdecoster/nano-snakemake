@@ -357,6 +357,3 @@ rule annotate_vcf:
     threads: 8
     shell:
         "vcfanno -ends -p {threads} {params.conf} {input} > {output} 2> {log}"
-
-
-# add mosdepth information and plots on called sites
