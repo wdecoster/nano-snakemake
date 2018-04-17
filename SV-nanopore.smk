@@ -158,7 +158,7 @@ rule nanosv_call:
         bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
         bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai",
         bed = config["annotbed"]
-        #bed = "split_annotation_bed/{chromosome}.bed"
+        # bed = "split_annotation_bed/{chromosome}.bed"
     output:
         temp("split_nanosv_genotypes/{sample}-{chromosome}.vcf")
     params:
