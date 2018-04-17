@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import pysam
 from argparse import ArgumentParser
 
