@@ -148,7 +148,8 @@ rule sniffles_genotype:
 
 rule samtools_split:
     input:
-        "ngmlr_alignment/{sample}.bam"
+        bam = "ngmlr_alignment/{sample}.bam",
+        bai = "ngmlr_alignment/{sample}.bam.bai",
     output:
         temp("split_ngmlr_alignment/{sample}-{chromosome}.bam")
     params:
@@ -156,7 +157,7 @@ rule samtools_split:
     log:
         "logs/samtools_split/{sample}-{chromosome}.log"
     shell:
-        "samtools view {input} {params.chrom} -o {output} 2> {log}"
+        "samtools view {input.bam} {params.chrom} -o {output} 2> {log}"
 
 rule split_bed:
     input:
