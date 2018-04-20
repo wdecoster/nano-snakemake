@@ -8,3 +8,6 @@ genome:
 
 annotbed:
     /path/to/database/annotation.bed.gz
+
+parameters:
+    survivor_distance: 500

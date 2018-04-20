@@ -203,7 +203,7 @@ rule survivor:
         vcf = temp("{caller}_combined/{stage}.vcf"),
         fofn = temp("{caller}_{stage}/samples.fofn")
     params:
-        distance = 500,
+        distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
         same_type = 1,
         same_strand = -1,
@@ -226,7 +226,7 @@ rule survivor_all:
         vcf = temp("all_combined/genotypes.vcf"),
         fofn = temp("all_combined/samples.fofn")
     params:
-        distance = 500,
+        distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
         same_type = 1,
         same_strand = -1,
@@ -247,7 +247,7 @@ rule survivor_pairwise:
         vcf = temp("high_confidence/{sample}.vcf"),
         fofn = temp("high_confidence/{sample}.fofn")
     params:
-        distance = 500,
+        distance = config["parameters"]["survivor_distance"],
         caller_support = 2,
         same_type = 1,
         same_strand = -1,
@@ -268,7 +268,7 @@ rule survivor_high_confidence:
         vcf = temp("high_confidence_combined/genotypes.vcf"),
         fofn = temp("high_confidence_combined/samples.fofn")
     params:
-        distance = 500,
+        distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
         same_type = 1,
         same_strand = -1,
