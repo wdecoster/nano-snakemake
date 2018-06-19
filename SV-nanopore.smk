@@ -86,7 +86,7 @@ rule ngmlr:
     output:
         protected("ngmlr_alignment/{sample}.bam")
     threads:
-        24
+        36
     log:
         "logs/ngmlr/{sample}.log"
     shell:
