@@ -180,10 +180,15 @@ rule nanosv_call:
         temp("split_nanosv_genotypes/{sample}-{chromosome}.vcf")
     params:
         samtools = "samtools"
+    threads:
+        12
     log:
         "logs/nanosv/{sample}-{chromosome}.log"
     shell:
-        "NanoSV --bed {input.bed} -s {params.samtools} {input.bam} -o {output} 2> {log}"
+        "NanoSV --bed {input.bed} \
+                --threads {threads} \
+                --sambamba {params.samtools} {input.bam} \
+                -o {output} 2> {log}"
 
 
 rule cat_vcfs:
