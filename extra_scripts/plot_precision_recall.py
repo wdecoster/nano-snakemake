@@ -4,36 +4,74 @@ import matplotlib.pyplot as plt
 
 
 class Callset(object):
-    def __init__(self, aligner, caller, precision, recall, shape, colour):
+    def __init__(self, aligner, caller, precision, recall):
         self.aligner = aligner
         self.caller = caller
         self.precision = int(precision)
         self.recall = int(recall)
-        self.shape = shape
-        self.colour = colour
+        self.shape = None
+        self.colour = None
 
-    def plot(self, axes):
-        axes.scatter(self.precision, self.recall, c=self.colour, marker=self.shape)
+    def plot(self):
+        return plt.scatter(self.precision, self.recall, c=self.colour, marker=self.shape)
 
 
 def main():
     args = get_args()
     calls = [Callset(*line) for line in csv.reader(open(args.results), delimiter="\t")]
-    fig, axes = plt.subplots(1, 1)
-    for c in calls:
-        c.plot(axes)
+    aligner_index, aligners = aligner_to_symbol(calls)
+    caller_index, callers = caller_to_colour(calls)
+    lines = [c.plot() for c in calls]
+
     plt.xlim(0, 100)
     plt.ylim(0, 100)
     plt.xlabel('Precision')
     plt.ylabel('Recall')
-    # markers = plt.legend()
+    plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
+                                    labels=aligners,
+                                    loc='upper left',
+                                    frameon=False))
+    plt.gca().add_artist(plt.legend(handles=[lines[i] for i in caller_index],
+                                    labels=callers,
+                                    loc='lower left',
+                                    frameon=False))
     plt.show()
+
+
+def aligner_to_symbol(calls):
+    """
+    Assign symbols to different aligners in the input file
+    Set the attribute of the class instances
+
+    return a list of indices for which each aligner is found uniquely and all aligners
+    """
+    symbols = ['o', '+', 'x', 'v', '*', 'D', 's', 'p', '8', 'X']
+    aligners = set([c.aligner for c in calls])
+    aligner_to_symbol_dict = {a: s for a, s in zip(aligners, symbols)}
+    for c in calls:
+        c.shape = aligner_to_symbol_dict[c.aligner]
+    return [[c.aligner for c in calls].index(i) for i in aligners], aligners
+
+
+def caller_to_colour(calls):
+    """
+    Assign colours to different callers in the input file
+    Set the attribute of the class instances
+
+    return a list of indices for which each caller is found uniquely and all callers
+    """
+    colours = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    callers = set([c.caller for c in calls])
+    caller_to_colour_dict = {ca: co for ca, co in zip(callers, colours)}
+    for c in calls:
+        c.colour = caller_to_colour_dict[c.caller]
+    return [[c.caller for c in calls].index(i) for i in callers], callers
 
 
 def get_args():
     parser = ArgumentParser(description="Plot precision and recall for multiple callsets")
     parser.add_argument(
-        "results", help="A tsv file with aligner caller precision recall shape colour")
+        "results", help="A tsv file with aligner caller precision recall")
     return parser.parse_args()
 
 
