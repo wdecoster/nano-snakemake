@@ -14,7 +14,7 @@ def main():
     else:
         ignore_type = "1"
     combined_vcf = survivor(samples=[args.truth, args.test],
-                            distace=args.distance,
+                            distance=args.distance,
                             ignore_type=ignore_type,
                             minlength=args.minlength)
     truth_set, test_set = make_venn(combined_vcf)
