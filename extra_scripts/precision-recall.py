@@ -68,6 +68,7 @@ def make_venn(vcf, outname="venn.png"):
     identifier_sets = [set(i) for i in identifier_list]
     venn2(identifier_sets, set_labels=('Truth', 'Test'))
     plt.savefig(outname)
+    plt.close()
     return identifier_sets
 
 
@@ -96,6 +97,7 @@ def bar_chart(vcf, outname="stacked_bar.png"):
     plt.legend(frameon=False,
                fontsize="small")
     plt.savefig(outname)
+    plt.close()
 
 
 def get_args():
