@@ -7,8 +7,8 @@ class Callset(object):
     def __init__(self, aligner, caller, precision, recall):
         self.aligner = aligner
         self.caller = caller
-        self.precision = int(precision)
-        self.recall = int(recall)
+        self.precision = float(precision)
+        self.recall = float(recall)
         self.shape = None
         self.colour = None
 
