@@ -77,16 +77,16 @@ def bar_chart(vcf, outname="stacked_bar.png"):
     Make a stacked bar chart for length of the SV split by validation status
     This ignores zygosity.
     """
-    len_dict = {"true": [], "false": [], "missed": []}
+    len_dict = {"True": [], "False": [], "Missed": []}
     for v in VCF(vcf):
         if not v.INFO.get('SVTYPE') == 'TRA':
             calls = [is_variant(call) for call in v.gt_types]
             if calls == [True, True]:
-                len_dict['true'].append(v.INFO.get('AVGLEN'))
+                len_dict['True'].append(v.INFO.get('AVGLEN'))
             elif calls == [False, True]:
-                len_dict['false'].append(v.INFO.get('AVGLEN'))
+                len_dict['False'].append(v.INFO.get('AVGLEN'))
             elif calls == [True, False]:
-                len_dict['missed'].append(v.INFO.get('AVGLEN'))
+                len_dict['Missed'].append(v.INFO.get('AVGLEN'))
     plt.hist(x=np.array(list(len_dict.values())),
              bins=[i for i in range(0, 2000, 50)],
              stacked=True,
