@@ -5,6 +5,7 @@ import sys
 from cyvcf2 import VCF
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
+import tempfile
 
 
 def main():
@@ -34,8 +35,8 @@ def survivor(samples, distance, ignore_type, minlength):
     -estimate distance between calls (no)
     -specify minimal size of SV event (args.minlength)
     """
-    fofn_f = "samples.fofn"
-    vcf_out = "combined.vcf"
+    fofn_f = tempfile.mkstemp()[1]
+    vcf_out = tempfile.mkstemp()[1]
     with open(fofn_f, 'w') as fofn:
         for s in samples:
             fofn.write(s + "\n")
