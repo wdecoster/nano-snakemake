@@ -43,7 +43,7 @@ def survivor(samples, distance, ignore_type, minlength):
     survivor_cmd = f"SURVIVOR merge {fofn_f} {distance} 1 {ignore_type} -1 -1 {minlength} {vcf_out}"
     sys.stderr.write("Executing SURVIVOR...\n")
     subprocess.call(shlex.split(survivor_cmd))
-    return VCF(vcf_out)
+    return vcf_out
 
 
 def is_variant(call):
@@ -58,7 +58,7 @@ def is_variant(call):
 
 def make_venn(vcf, outname="venn.png"):
     identifier_list = [[], []]
-    for v in vcf:
+    for v in VCF(vcf):
         for index, call in enumerate(v.gt_types):
             if is_variant(call):
                 identifier_list[index].append(v.ID)
