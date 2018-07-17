@@ -47,7 +47,9 @@ def survivor(samples, distance, ignore_type, minlength):
 
 
 def is_variant(call):
-    """Check if a variant position qualifies as a variant"""
+    """Check if a variant position qualifies as a variant
+
+    0,1,2,3==HOM_REF, HET, UNKNOWN, HOM_ALT"""
     if call == 1 or call == 3:
         return True
     else:
