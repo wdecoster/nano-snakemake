@@ -6,6 +6,7 @@ from cyvcf2 import VCF
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
 import tempfile
+import numpy as np
 
 
 def main():
@@ -22,6 +23,8 @@ def main():
     tp = len(truth_set & test_set)
     print(f"Precision: {round(100 * tp / len(test_set), ndigits=1)}%")
     print(f"Recall: {round(100 * tp / len(truth_set), ndigits=1)}%")
+    if args.bar:
+        bar_chart(combined_vcf)
 
 
 def survivor(samples, distance, ignore_type, minlength):
@@ -68,6 +71,33 @@ def make_venn(vcf, outname="venn.png"):
     return identifier_sets
 
 
+def bar_chart(vcf, outname="stacked_bar.png"):
+    """
+    Make a stacked bar chart for length of the SV split by validation status
+    This ignores zygosity.
+    """
+    len_dict = {"true": [], "false": [], "missed": []}
+    for v in VCF(vcf):
+        if not v.INFO.get('SVTYPE') == 'TRA':
+            calls = [is_variant(call) for call in v.gt_types]
+            if calls == [True, True]:
+                len_dict['true'].append(v.INFO.get('AVGLEN'))
+            elif calls == [False, True]:
+                len_dict['false'].append(v.INFO.get('AVGLEN'))
+            elif calls == [True, False]:
+                len_dict['missed'].append(v.INFO.get('AVGLEN'))
+        plt.hist(x=np.array(list(len_dict.values())),
+                 bins=[i for i in range(0, 2000, 50)],
+                 stacked=True,
+                 histtype='bar',
+                 label=list(len_dict.keys()))
+        plt.xlabel('Lenghth of structural variant')
+        plt.ylabel('Number of variants')
+        plt.legend(frameon=False,
+                   fontsize="small")
+        plt.savefig(outname)
+
+
 def get_args():
     parser = ArgumentParser(description="Calculate precision-recall metrics from 2 vcf files")
     parser.add_argument("--truth", help="vcf containing truth set", required=True)
@@ -80,6 +110,9 @@ def get_args():
                         default=-1)
     parser.add_argument("-i", "--ignore_type",
                         help="Ignore the type of the structural variant",
+                        action="store_true")
+    parser.add_argument("--bar",
+                        help="Make stacked bar chart of SV lengths coloured by validation status",
                         action="store_true")
     return parser.parse_args()
 
