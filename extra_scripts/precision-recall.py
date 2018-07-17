@@ -86,16 +86,16 @@ def bar_chart(vcf, outname="stacked_bar.png"):
                 len_dict['false'].append(v.INFO.get('AVGLEN'))
             elif calls == [True, False]:
                 len_dict['missed'].append(v.INFO.get('AVGLEN'))
-        plt.hist(x=np.array(list(len_dict.values())),
-                 bins=[i for i in range(0, 2000, 50)],
-                 stacked=True,
-                 histtype='bar',
-                 label=list(len_dict.keys()))
-        plt.xlabel('Lenghth of structural variant')
-        plt.ylabel('Number of variants')
-        plt.legend(frameon=False,
-                   fontsize="small")
-        plt.savefig(outname)
+    plt.hist(x=np.array(list(len_dict.values())),
+             bins=[i for i in range(0, 2000, 50)],
+             stacked=True,
+             histtype='bar',
+             label=list(len_dict.keys()))
+    plt.xlabel('Lenghth of structural variant')
+    plt.ylabel('Number of variants')
+    plt.legend(frameon=False,
+               fontsize="small")
+    plt.savefig(outname)
 
 
 def get_args():
