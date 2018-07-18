@@ -340,7 +340,8 @@ rule SV_length_plot:
     log:
         "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
-        os.path.join(workflow.basedir, "scripts/SV-length-plot.py") + " {input} {output} 2> {log}"
+        os.path.join(workflow.basedir, "scripts/SV-length-plot.py") + \
+            " {input} --output {output} 2> {log}"
 
 
 rule SV_plot_carriers:
