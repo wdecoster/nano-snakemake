@@ -13,7 +13,7 @@ def main(vcf_file):
     len_dict = defaultdict(list)
     for v in VCF(vcf_file):
         if not v.INFO.get('SVTYPE') == 'TRA':
-            len_dict[v.INFO.get('SVTYPE')].append(v.INFO.get('SVLEN'))
+            len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
     lengths = np.array(list(len_dict.values()))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
