@@ -109,7 +109,7 @@ def get_args():
                         default=500)
     parser.add_argument("--minlength",
                         help="Minimum length of SVs to be taken into account",
-                        default=-1)
+                        default=50)
     parser.add_argument("-i", "--ignore_type",
                         help="Ignore the type of the structural variant",
                         action="store_true")
