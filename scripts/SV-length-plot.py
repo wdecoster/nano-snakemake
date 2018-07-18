@@ -23,7 +23,7 @@ def make_plot(dict_of_lengths, output):
     lengths = np.array(list(dict_of_lengths.values()))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
-             bins=[i for i in range(0, 2000, 50)],
+             bins=[i for i in range(0, 2000, 10)],
              stacked=True,
              histtype='bar',
              label=list(dict_of_lengths.keys()))
@@ -34,7 +34,7 @@ def make_plot(dict_of_lengths, output):
 
     plt.subplot(2, 1, 2)
     plt.hist(x=lengths,
-             bins=[i for i in range(0, 20000, 500)],
+             bins=[i for i in range(0, 20000, 100)],
              stacked=True,
              histtype='bar',
              label=list(dict_of_lengths.keys()),
