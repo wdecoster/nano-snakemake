@@ -22,7 +22,6 @@ def main():
     aligner_index, aligners = aligner_to_symbol(calls)
     caller_index, callers = caller_to_colour(calls)
     lines = [c.plot() for c in calls]
-
     plt.xlim(0, 100)
     plt.ylim(0, 100)
     plt.xlabel('Precision')
@@ -46,13 +45,15 @@ def aligner_to_symbol(calls):
     Set the attribute of the class instances
 
     return a list of indices for which each aligner is found uniquely and all aligners
+    sorted by aligners
     """
     symbols = ['o', '+', 'x', 'v', '*', 'D', 's', 'p', '8', 'X']
     aligners = set([c.aligner for c in calls])
     aligner_to_symbol_dict = {a: s for a, s in zip(aligners, symbols)}
     for c in calls:
         c.shape = aligner_to_symbol_dict[c.aligner]
-    return [[c.aligner for c in calls].index(i) for i in aligners], aligners
+    index_and_aligners = zip([[c.aligner for c in calls].index(i) for i in aligners], aligners)
+    return zip(*sorted(index_and_aligners, key=lambda x: x[1]))
 
 
 def caller_to_colour(calls):
@@ -61,13 +62,15 @@ def caller_to_colour(calls):
     Set the attribute of the class instances
 
     return a list of indices for which each caller is found uniquely and all callers
+    sorted by callers
     """
     colours = plt.rcParams['axes.prop_cycle'].by_key()['color']
     callers = set([c.caller for c in calls])
     caller_to_colour_dict = {ca: co for ca, co in zip(callers, colours)}
     for c in calls:
         c.colour = caller_to_colour_dict[c.caller]
-    return [[c.caller for c in calls].index(i) for i in callers], callers
+    index_and_callers = zip([[c.caller for c in calls].index(i) for i in callers], callers)
+    return zip(*sorted(index_and_callers, key=lambda x: x[1]))
 
 
 def get_args():
