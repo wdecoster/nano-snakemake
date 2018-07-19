@@ -297,7 +297,7 @@ rule survivor_pairwise_high_sensitivity:
     params:
         distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
-        same_type = 1,
+        same_type = -1,
         same_strand = -1,
         estimate_distance = -1,
         minimum_size = -1,
@@ -318,7 +318,7 @@ rule survivor_combine_high_sensitivity:
     params:
         distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
-        same_type = 1,
+        same_type = -1,
         same_strand = -1,
         estimate_distance = -1,
         minimum_size = -1,
