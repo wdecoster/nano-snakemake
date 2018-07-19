@@ -36,6 +36,7 @@ rule all:
         "alignment_stats/ngmlr.txt",
         "all_combined/annot_genotypes.vcf",
         "high_confidence_combined/annot_genotypes.vcf",
+        "high_sensitivity_combined/annot_genotypes.vcf",
         "mosdepth/regions.combined.gz",
         "mosdepth_global_plot/global.html",
 
@@ -281,6 +282,48 @@ rule survivor_combine_high_confidence:
         minimum_size = -1,
     log:
         "logs/high_confidence_combined/surivor_high_confidence.log"
+    shell:
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output.vcf} 2> {log}"
+
+rule survivor_pairwise_high_sensitivity:
+    input:
+        expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
+    output:
+        vcf = temp("high_sensitivity/{sample}.vcf"),
+        fofn = temp("high_sensitivity/{sample}.fofn")
+    params:
+        distance = config["parameters"]["survivor_distance"],
+        caller_support = 1,
+        same_type = 1,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
+    log:
+        "logs/high_sensitivity/surivor_pairwise_{sample}.log"
+    shell:
+        "ls {input} > {output.fofn} ; \
+        SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
+        {params.same_type} {params.same_strand} {params.estimate_distance}  \
+        {params.minimum_size} {output.vcf} 2> {log}"
+
+rule survivor_combine_high_sensitivity:
+    input:
+        expand("high_sensitivity/{sample}.vcf", sample=config["samples"])
+    output:
+        vcf = temp("high_sensitivity_combined/genotypes.vcf"),
+        fofn = temp("high_sensitivity_combined/samples.fofn")
+    params:
+        distance = config["parameters"]["survivor_distance"],
+        caller_support = 1,
+        same_type = 1,
+        same_strand = -1,
+        estimate_distance = -1,
+        minimum_size = -1,
+    log:
+        "logs/high_sensitivity_combined/surivor_high_sensitivity.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
