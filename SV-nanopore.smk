@@ -419,7 +419,7 @@ rule annotate_vcf:
     log:
         "logs/annotate_vcf/annotate_{caller}.log"
     params:
-        conf = "/home/wdecoster/projects/SV-snakemake/configuration/vcfanno_conf.toml"
+        conf = config["vcfanno_conf"],
     threads: 8
     shell:
         "vcfanno -ends -p {threads} {params.conf} {input} > {output} 2> {log}"
