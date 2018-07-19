@@ -245,7 +245,7 @@ rule survivor_all:
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output.vcf} 2> {log}"
 
-rule survivor_pairwise:
+rule survivor_pairwise_high_confidence:
     input:
         expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
     output:
@@ -266,7 +266,7 @@ rule survivor_pairwise:
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output.vcf} 2> {log}"
 
-rule survivor_high_confidence:
+rule survivor_combine_high_confidence:
     input:
         expand("high_confidence/{sample}.vcf", sample=config["samples"])
     output:
