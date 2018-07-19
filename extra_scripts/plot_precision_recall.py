@@ -27,14 +27,16 @@ def main():
     plt.ylim(0, 100)
     plt.xlabel('Precision')
     plt.ylabel('Recall')
-    plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
-                                    labels=aligners,
-                                    loc='upper left',
-                                    frameon=False))
-    plt.gca().add_artist(plt.legend(handles=[lines[i] for i in caller_index],
-                                    labels=callers,
-                                    loc='lower left',
-                                    frameon=False))
+    if len(aligners) > 1:
+        plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
+                                        labels=aligners,
+                                        loc='upper left',
+                                        frameon=False))
+    if len(callers) > 1:
+        plt.gca().add_artist(plt.legend(handles=[lines[i] for i in caller_index],
+                                        labels=callers,
+                                        loc='lower left',
+                                        frameon=False))
     plt.show()
 
 
