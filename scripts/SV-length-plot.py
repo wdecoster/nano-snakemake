@@ -3,7 +3,6 @@
 from cyvcf2 import VCF
 from collections import defaultdict
 from argparse import ArgumentParser
-import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
