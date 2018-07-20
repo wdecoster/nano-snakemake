@@ -19,6 +19,15 @@ def main():
 
 
 def make_plot(dict_of_lengths, output):
+    """Makes two stacked bar charts
+    Plotting two bar charts of number of SVs by length split by SV type
+    Use a consistent colouring scheme for those in "standard_order" to
+    make comparison reasonable
+
+    First bar chart is up to 2kb with bins of 10bp
+    Second bar chart is up to 20kb, with bins of 100bp
+     and uses log scaling on the y-axis
+    """
     standard_order = ['DEL', 'INS', 'DUP', 'INV']
     spec_order = sorted([i for i in dict_of_lengths.keys() if i not in standard_order])
     sorter = standard_order + spec_order
