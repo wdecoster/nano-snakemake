@@ -20,13 +20,17 @@ def main():
 
 
 def make_plot(dict_of_lengths, output):
-    lengths = np.array(list(dict_of_lengths.values()))
+    standard_order = ['DEL', 'INS', 'DUP', 'INV']
+    spec_order = sorted([i for i in dict_of_lengths.keys() if i not in standard_order])
+    sorter = standard_order + spec_order
+    names, lengths = zip(
+        *sorted([(k, v) for k, v in dict_of_lengths.items()], key=lambda x: sorter.index(x[0])))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
              bins=[i for i in range(0, 2000, 10)],
              stacked=True,
              histtype='bar',
-             label=list(dict_of_lengths.keys()))
+             label=names)
     plt.xlabel('Lenghth of structural variant')
     plt.ylabel('Number of variants')
     plt.legend(frameon=False,
@@ -37,7 +41,7 @@ def make_plot(dict_of_lengths, output):
              bins=[i for i in range(0, 20000, 100)],
              stacked=True,
              histtype='bar',
-             label=list(dict_of_lengths.keys()),
+             label=names,
              log=True)
     plt.xlabel('Lenghth of structural variant')
     plt.ylabel('Number of variants')
