@@ -45,7 +45,7 @@ def survivor(samples, distance, ignore_type, minlength):
             fofn.write(s + "\n")
     survivor_cmd = f"SURVIVOR merge {fofn_f} {distance} 1 {ignore_type} -1 -1 {minlength} {vcf_out}"
     sys.stderr.write("Executing SURVIVOR...\n")
-    subprocess.call(shlex.split(survivor_cmd))
+    subprocess.call(shlex.split(survivor_cmd), stdout=subprocess.DEVNULL)
     return vcf_out
 
 
