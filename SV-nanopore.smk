@@ -293,6 +293,7 @@ rule survivor_pairwise_high_sensitivity:
         expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
     output:
         vcf = temp("high_sensitivity/{sample}.vcf"),
+        vcf_unmerged = temp("high_sensitivity/{sample}_unmerged.vcf"),
         fofn = temp("high_sensitivity/{sample}.fofn")
     params:
         distance = config["parameters"]["survivor_high_sensitivity_distance"],
@@ -304,7 +305,8 @@ rule survivor_pairwise_high_sensitivity:
     log:
         "logs/high_sensitivity/surivor_pairwise_{sample}.log"
     shell:
-        "ls {input} > {output.fofn} ; \
+        "vcf-concat {input} | vcf-sort > {output.vcf_unmerged} ; \
+        ls {output.vcf_unmerged} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output.vcf} 2> {log}"
