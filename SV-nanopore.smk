@@ -182,7 +182,7 @@ rule nanosv_call:
     params:
         samtools = "samtools"
     threads:
-        1
+        2
     log:
         "logs/nanosv/{sample}-{chromosome}.log"
     shell:
