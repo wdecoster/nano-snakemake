@@ -14,6 +14,10 @@ def main():
     for v in VCF(args.vcf):
         if not v.INFO.get('SVTYPE') == 'TRA':
             len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
+    with open(args.counts, 'w') as counts:
+        counts.write("Number of nucleotides affected by SV:\n")
+        for svtype, lengths in len_dict.item():
+            counts.write("{}:\t{}\n".format(svtype, sum(lengths)))
     make_plot(dict_of_lengths=len_dict,
               output=args.output)
 
@@ -62,7 +66,12 @@ def make_plot(dict_of_lengths, output):
 def get_args():
     parser = ArgumentParser(description="create stacked bar plot of the SV lengths split by type")
     parser.add_argument("vcf", help="vcf file to parse")
-    parser.add_argument("-o", "--output", help="output file to write to", default="SV-length.png")
+    parser.add_argument("-o", "--output",
+                        help="output file to write figure to",
+                        default="SV-length.png")
+    parser.add_argument("-c", "--counts",
+                        help="output file to write counts to",
+                        default="SV-length.png")
     return parser.parse_args()
 
 
