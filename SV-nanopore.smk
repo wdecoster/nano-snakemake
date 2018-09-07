@@ -381,12 +381,13 @@ rule SV_length_plot:
     input:
         "{caller}_{stage}/{sample}.vcf"
     output:
-        "SV-plots/SV-length_{caller}_{stage}_{sample}.png"
+        plot = "SV-plots/SV-length_{caller}_{stage}_{sample}.png",
+        counts =  "SV-plots/SV-nucleotides_affected_{caller}_{stage}_{sample}.txt",
     log:
         "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/SV-length-plot.py") + \
-            " {input} --output {output} 2> {log}"
+            " {input} --output {output.plot} --counts {output.counts} 2> {log}"
 
 
 rule SV_plot_carriers:
