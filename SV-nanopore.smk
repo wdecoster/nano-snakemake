@@ -95,6 +95,20 @@ rule ngmlr:
          ngmlr --presets ont -t {threads} -r {input.genome} | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
+ rule minimap2-last-like_align:
+     input:
+         fq = get_samples,
+         genome = config["genome"]
+     output:
+         "minimap2-last-like_alignment/{sample}.bam"
+     threads:
+         8
+     log:
+         "logs/minimap2-last-like/{sample}.log"
+     shell:
+         "minimap2 --MD -a  --no-long-join -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
+          samtools sort -@ {threads} -o {output} - 2> {log}"
+
 
 rule samtools_index:
     input:
