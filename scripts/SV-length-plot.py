@@ -71,7 +71,7 @@ def get_args():
                         default="SV-length.png")
     parser.add_argument("-c", "--counts",
                         help="output file to write counts to",
-                        default="SV-length.png")
+                        default="SV-length.txt")
     return parser.parse_args()
 
 
