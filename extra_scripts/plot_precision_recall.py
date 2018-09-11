@@ -4,16 +4,21 @@ import matplotlib.pyplot as plt
 
 
 class Callset(object):
-    def __init__(self, aligner, caller, precision, recall):
+    def __init__(self, aligner, caller, precision, recall, opacity):
         self.aligner = aligner
         self.caller = caller
         self.precision = float(precision)
         self.recall = float(recall)
+        self.opacity = float(opacity)
         self.shape = None
         self.colour = None
 
     def plot(self):
-        return plt.scatter(self.precision, self.recall, c=self.colour, marker=self.shape)
+        return plt.scatter(x=self.precision,
+                           y=self.recall,
+                           c=self.colour,
+                           marker=self.shape,
+                           alpha=self.opacity)
 
 
 def main():
