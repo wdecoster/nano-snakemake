@@ -396,7 +396,7 @@ rule SV_length_plot:
         "{caller}_{stage}/{sample}.vcf"
     output:
         plot = "SV-plots/SV-length_{caller}_{stage}_{sample}.png",
-        counts =  "SV-plots/SV-nucleotides_affected_{caller}_{stage}_{sample}.txt",
+        counts = "SV-plots/SV-nucleotides_affected_{caller}_{stage}_{sample}.txt",
     log:
         "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
