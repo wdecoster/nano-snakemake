@@ -26,14 +26,14 @@ def get_chromosomes(genome, annotation):
 CHROMOSOMES = get_chromosomes(config["genome"], config["annotbed"])
 
 
-rule all:
+rule ngmlr:
     input:
         expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
                caller=["sniffles", "nanosv"]),
         expand("SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
         expand("{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
-        "alignment_stats/ngmlr.txt",
+        expand("alignment_stats/ngmlr_{sample}.txt", sample=config["samples"]),
         "all_combined/annot_genotypes.vcf",
         "high_confidence_combined/annot_genotypes.vcf",
         "high_sensitivity_combined/annot_genotypes.vcf",
@@ -61,7 +61,7 @@ rule mosdepth:
 rule minimap2:
     input:
         expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
-        "alignment_stats/minimap2.txt",
+        expand("alignment_stats/minimap2_{sample}.txt", sample=config["samples"]),
 
 
 #######################################################################################
@@ -80,7 +80,7 @@ rule minimap2_align:
         "minimap2 --MD -a -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
-rule ngmlr:
+rule ngmlr_align:
     input:
         fq = get_samples,
         genome = config["genome"]
@@ -127,9 +127,9 @@ rule alignment_stats:
         bam = expand("{{aligner}}_alignment/{sample}.bam", sample=config["samples"]),
         bai = expand("{{aligner}}_alignment/{sample}.bam.bai", sample=config["samples"])
     output:
-        "alignment_stats/{aligner}.txt"
+        "alignment_stats/{aligner}_{sample}.txt"
     log:
-        "logs/alignment_stats/{aligner}.log"
+        "logs/alignment_stats/{aligner}_{sample}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/alignment_stats.py") + \
             " -o {output} {input.bam} 2> {log}"
