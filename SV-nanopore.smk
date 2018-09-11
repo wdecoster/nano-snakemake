@@ -30,42 +30,50 @@ if not CHROMOSOMES:
              "Is your annotation matching to your fasta file?\n\n")
 
 
-rule ngmlr:
-    input:
-        expand("SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-               sample=config["samples"],
-               caller=["sniffles", "nanosv"]),
-        expand("SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
-        expand("{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
-        expand("alignment_stats/ngmlr_{sample}.txt", sample=config["samples"]),
-        "all_combined/annot_genotypes.vcf",
-        "high_confidence_combined/annot_genotypes.vcf",
-        "high_sensitivity_combined/annot_genotypes.vcf",
-        "mosdepth/regions.combined.gz",
-        "mosdepth_global_plot/global.html",
-
-
-rule sniffles:
-    input:
-        "sniffles_combined/annot_genotypes.vcf",
-        expand("SV-plots/SV-length_sniffles_genotypes_{sample}.png", sample=config["samples"]),
-        "SV-plots/SV-sniffles_carriers.png"
-
-rule nanosv:
-    input:
-        "nanosv_combined/annot_genotypes.vcf",
-        expand("SV-plots/SV-length_nanosv_genotypes_{sample}.png", sample=config["samples"]),
-        "SV-plots/SV-nanosv_carriers.png"
-
-rule mosdepth:
-    input:
-        "mosdepth/regions.combined.gz",
-        "mosdepth_global_plot/global.html",
-
 rule minimap2:
     input:
-        expand("minimap2_alignment/{sample}.bam.bai", sample=config["samples"]),
-        expand("alignment_stats/minimap2_{sample}.txt", sample=config["samples"]),
+        expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
+        expand("minimap2/SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
+        expand("minimap2/{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
+        expand("minimap2/alignment_stats/{sample}.txt", sample=config["samples"]),
+        "minimap2/all_combined/annot_genotypes.vcf",
+        "minimap2/high_confidence_combined/annot_genotypes.vcf",
+        "minimap2/high_sensitivity_combined/annot_genotypes.vcf",
+        "minimap2/mosdepth/regions.combined.gz",
+        "minimap2/mosdepth_global_plot/global.html",
+
+
+rule minimap2_last_like:
+    input:
+        expand("minimap2_last_like/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
+        expand(
+            "minimap2_last_like/SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
+        expand("minimap2_last_like/{caller}_combined/annot_genotypes.vcf",
+               caller=["sniffles", "nanosv"]),
+        expand("minimap2_last_like/alignment_stats/{sample}.txt", sample=config["samples"]),
+        "minimap2_last_like/all_combined/annot_genotypes.vcf",
+        "minimap2_last_like/high_confidence_combined/annot_genotypes.vcf",
+        "minimap2_last_like/high_sensitivity_combined/annot_genotypes.vcf",
+        "minimap2_last_like/mosdepth/regions.combined.gz",
+        "minimap2_last_like/mosdepth_global_plot/global.html",
+
+rule ngmlr:
+    input:
+        expand("ngmlr/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
+        expand("ngmlr/SV-plots/SV-{caller}_carriers.png", caller=["sniffles", "nanosv"]),
+        expand("ngmlr/{caller}_combined/annot_genotypes.vcf", caller=["sniffles", "nanosv"]),
+        expand("ngmlr/alignment_stats/{sample}.txt", sample=config["samples"]),
+        "ngmlr/all_combined/annot_genotypes.vcf",
+        "ngmlr/high_confidence_combined/annot_genotypes.vcf",
+        "ngmlr/high_sensitivity_combined/annot_genotypes.vcf",
+        "ngmlr/mosdepth/regions.combined.gz",
+        "ngmlr/mosdepth_global_plot/global.html",
 
 
 #######################################################################################
@@ -75,7 +83,7 @@ rule minimap2_align:
         fq = get_samples,
         genome = config["genome"]
     output:
-        "minimap2_alignment/{sample}.bam"
+        "minimap2/alignment/{sample}.bam"
     threads:
         8
     log:
@@ -89,7 +97,7 @@ rule ngmlr_align:
         fq = get_samples,
         genome = config["genome"]
     output:
-        protected("ngmlr_alignment/{sample}.bam")
+        protected("ngmlr/alignment/{sample}.bam")
     threads:
         36
     log:
@@ -104,11 +112,11 @@ rule minimap2_last_like_align:
         fq = get_samples,
         genome = config["genome"]
     output:
-        "minimap2-last-like_alignment/{sample}.bam"
+        "minimap2_last_like/alignment/{sample}.bam"
     threads:
         8
     log:
-        "logs/minimap2-last-like/{sample}.log"
+        "logs/minimap2_last_like/{sample}.log"
     shell:
         "minimap2 --MD -a  --no-long-join -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
@@ -116,49 +124,47 @@ rule minimap2_last_like_align:
 
 rule samtools_index:
     input:
-        "{aligner}_alignment/{sample}.bam"
+        "{aligner}/alignment/{sample}.bam"
     output:
-        "{aligner}_alignment/{sample}.bam.bai"
+        "{aligner}/alignment/{sample}.bam.bai"
     threads: 4
     log:
-        "logs/samtools_index/{aligner}_{sample}.log"
+        "logs/{aligner}/samtools_index/{sample}.log"
     shell:
         "samtools index -@ {threads} {input} 2> {log}"
 
-
 rule alignment_stats:
     input:
-        bam = expand("{{aligner}}_alignment/{sample}.bam", sample=config["samples"]),
-        bai = expand("{{aligner}}_alignment/{sample}.bam.bai", sample=config["samples"])
+        bam = expand("{{aligner}}/alignment/{sample}.bam", sample=config["samples"]),
+        bai = expand("{{aligner}}/alignment/{sample}.bam.bai", sample=config["samples"])
     output:
-        "alignment_stats/{aligner}_{sample}.txt"
+        "{aligner}/alignment_stats/{sample}.txt"
     log:
-        "logs/alignment_stats/{aligner}_{sample}.log"
+        "logs/{aligner}/alignment_stats/{sample}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/alignment_stats.py") + \
             " -o {output} {input.bam} 2> {log}"
 
 rule sniffles_call:
     input:
-        "ngmlr_alignment/{sample}.bam"
+        "{aligner}/alignment/{sample}.bam"
     output:
-        "sniffles_calls/{sample}.vcf"
+        "{aligner}/sniffles_calls/{sample}.vcf"
     threads: 8
     log:
-        "logs/sniffles_call/{sample}.log"
+        "logs/{aligner}/sniffles_call/{sample}.log"
     shell:
         "sniffles --mapped_reads {input} --vcf {output} --threads {threads} 2> {log}"
 
-
 rule sniffles_genotype:
     input:
-        bam = "ngmlr_alignment/{sample}.bam",
-        ivcf = "sniffles_combined/calls.vcf"
+        bam = "{aligner}/alignment/{sample}.bam",
+        ivcf = "{aligner}/sniffles_combined/calls.vcf"
     output:
-        "sniffles_genotypes/{sample}.vcf"
+        "{aligner}/sniffles_genotypes/{sample}.vcf"
     threads: 8
     log:
-        "logs/sniffles_genotype/{sample}.log"
+        "logs/{aligner}/sniffles_genotype/{sample}.log"
     shell:
         "sniffles --mapped_reads {input.bam} \
                   --vcf {output} \
@@ -167,14 +173,14 @@ rule sniffles_genotype:
 
 rule samtools_split:
     input:
-        bam = "ngmlr_alignment/{sample}.bam",
-        bai = "ngmlr_alignment/{sample}.bam.bai",
+        bam = "{aligner}/alignment/{sample}.bam",
+        bai = "{aligner}/alignment/{sample}.bam.bai",
     output:
-        temp("split_ngmlr_alignment/{sample}-{chromosome}.bam")
+        temp("{aligner}/alignment/{sample}-{chromosome}.bam")
     params:
         chrom = "{chromosome}"
     log:
-        "logs/samtools_split/{sample}-{chromosome}.log"
+        "logs/{aligner}/samtools_split/{sample}-{chromosome}.log"
     shell:
         "samtools view {input.bam} {params.chrom} -o {output} 2> {log}"
 
@@ -191,18 +197,18 @@ rule split_bed:
 
 rule nanosv_call:
     input:
-        bam = "split_ngmlr_alignment/{sample}-{chromosome}.bam",
-        bai = "split_ngmlr_alignment/{sample}-{chromosome}.bam.bai",
+        bam = "{aligner}/alignment/{sample}-{chromosome}.bam",
+        bai = "{aligner}/alignment/{sample}-{chromosome}.bam.bai",
         bed = config["annotbed"]
         # bed = "split_annotation_bed/{chromosome}.bed"
     output:
-        temp("split_nanosv_genotypes/{sample}-{chromosome}.vcf")
+        temp("{aligner}/split_nanosv_genotypes/{sample}-{chromosome}.vcf")
     params:
         samtools = "samtools"
     threads:
         2
     log:
-        "logs/nanosv/{sample}-{chromosome}.log"
+        "logs/{aligner}/nanosv/{sample}-{chromosome}.log"
     shell:
         "NanoSV --bed {input.bed} \
                 --threads {threads} \
@@ -212,20 +218,21 @@ rule nanosv_call:
 
 rule cat_vcfs:
     input:
-        expand("split_nanosv_genotypes/{{sample}}-{chromosome}.vcf", chromosome=CHROMOSOMES)
+        expand("{{aligner}}/split_nanosv_genotypes/{{sample}}-{chromosome}.vcf",
+               chromosome=CHROMOSOMES)
     output:
-        "nanosv_genotypes/{sample}.vcf"
+        "{aligner}/nanosv_genotypes/{sample}.vcf"
     log:
-        "logs/vcf-concat/{sample}.log"
+        "logs/{aligner}/vcf-concat/{sample}.log"
     shell:
         "vcf-concat {input} > {output} 2> {log}"
 
 rule survivor:
     input:
-        expand("{{caller}}_{{stage}}/{sample}.vcf", sample=config["samples"])
+        expand("{{aligner}}/{{caller}}_{{stage}}/{sample}.vcf", sample=config["samples"])
     output:
-        vcf = temp("{caller}_combined/{stage}.vcf"),
-        fofn = temp("{caller}_{stage}/samples.fofn")
+        vcf = temp("{aligner}/{caller}_combined/{stage}.vcf"),
+        fofn = temp("{aligner}/{caller}_{stage}/samples.fofn")
     params:
         distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
@@ -234,7 +241,7 @@ rule survivor:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{caller}/surivor_{stage}.log"
+        "logs/{aligner}/{caller}/surivor_{stage}.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -243,12 +250,12 @@ rule survivor:
 
 rule survivor_all:
     input:
-        expand("{caller}_genotypes/{sample}.vcf",
+        expand("{{aligner}}/{caller}_genotypes/{sample}.vcf",
                sample=config["samples"],
                caller=["sniffles", "nanosv"])
     output:
-        vcf = temp("all_combined/genotypes.vcf"),
-        fofn = temp("all_combined/samples.fofn")
+        vcf = temp("{aligner}/all_combined/genotypes.vcf"),
+        fofn = temp("{aligner}/all_combined/samples.fofn")
     params:
         distance = config["parameters"]["survivor_distance"],
         caller_support = 1,
@@ -257,7 +264,7 @@ rule survivor_all:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/all/surivor.log"
+        "logs/{aligner}/all/surivor.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -266,10 +273,10 @@ rule survivor_all:
 
 rule survivor_pairwise_high_confidence:
     input:
-        expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
+        expand("{{aligner}}/{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
     output:
-        vcf = temp("high_confidence/{sample}.vcf"),
-        fofn = temp("high_confidence/{sample}.fofn")
+        vcf = temp("{aligner}/high_confidence/{sample}.vcf"),
+        fofn = temp("{aligner}/high_confidence/{sample}.fofn")
     params:
         distance = config["parameters"]["survivor_high_confidence_distance"],
         caller_support = 2,
@@ -278,7 +285,7 @@ rule survivor_pairwise_high_confidence:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/high_confidence/surivor_pairwise_{sample}.log"
+        "logs/{aligner}/high_confidence/surivor_pairwise_{sample}.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -287,10 +294,10 @@ rule survivor_pairwise_high_confidence:
 
 rule survivor_combine_high_confidence:
     input:
-        expand("high_confidence/{sample}.vcf", sample=config["samples"])
+        expand("{{aligner}}/high_confidence/{sample}.vcf", sample=config["samples"])
     output:
-        vcf = temp("high_confidence_combined/genotypes.vcf"),
-        fofn = temp("high_confidence_combined/samples.fofn")
+        vcf = temp("{aligner}/high_confidence_combined/genotypes.vcf"),
+        fofn = temp("{aligner}/high_confidence_combined/samples.fofn")
     params:
         distance = config["parameters"]["survivor_high_confidence_distance"],
         caller_support = 1,
@@ -299,7 +306,7 @@ rule survivor_combine_high_confidence:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/high_confidence_combined/surivor_high_confidence.log"
+        "logs/{aligner}/high_confidence_combined/surivor_high_confidence.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -308,11 +315,11 @@ rule survivor_combine_high_confidence:
 
 rule survivor_pairwise_high_sensitivity:
     input:
-        expand("{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
+        expand("{{aligner}}/{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
     output:
-        vcf = temp("high_sensitivity/{sample}.vcf"),
-        vcf_unmerged = temp("high_sensitivity/{sample}_unmerged.vcf"),
-        fofn = temp("high_sensitivity/{sample}.fofn")
+        vcf = temp("{aligner}/high_sensitivity/{sample}.vcf"),
+        vcf_unmerged = temp("{aligner}/high_sensitivity/{sample}_unmerged.vcf"),
+        fofn = temp("{aligner}/high_sensitivity/{sample}.fofn")
     params:
         distance = config["parameters"]["survivor_high_sensitivity_distance"],
         caller_support = 1,
@@ -321,7 +328,7 @@ rule survivor_pairwise_high_sensitivity:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/high_sensitivity/surivor_pairwise_{sample}.log"
+        "logs/{aligner}/high_sensitivity/surivor_pairwise_{sample}.log"
     shell:
         "vcf-concat {input} | vcf-sort > {output.vcf_unmerged} ; \
         ls {output.vcf_unmerged} > {output.fofn} ; \
@@ -331,10 +338,10 @@ rule survivor_pairwise_high_sensitivity:
 
 rule survivor_combine_high_sensitivity:
     input:
-        expand("high_sensitivity/{sample}.vcf", sample=config["samples"])
+        expand("{{aligner}}/high_sensitivity/{sample}.vcf", sample=config["samples"])
     output:
-        vcf = temp("high_sensitivity_combined/genotypes.vcf"),
-        fofn = temp("high_sensitivity_combined/samples.fofn")
+        vcf = temp("{aligner}/high_sensitivity_combined/genotypes.vcf"),
+        fofn = temp("{aligner}/high_sensitivity_combined/samples.fofn")
     params:
         distance = config["parameters"]["survivor_high_sensitivity_distance"],
         caller_support = 1,
@@ -343,7 +350,7 @@ rule survivor_combine_high_sensitivity:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/high_sensitivity_combined/surivor_high_sensitivity.log"
+        "logs/{aligner}/high_sensitivity_combined/surivor_high_sensitivity.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -353,17 +360,17 @@ rule survivor_combine_high_sensitivity:
 
 rule mosdepth_get:
     input:
-        bam = "ngmlr_alignment/{sample}.bam",
-        bai = "ngmlr_alignment/{sample}.bam.bai"
+        bam = "{aligner}/alignment/{sample}.bam",
+        bai = "{aligner}/alignment/{sample}.bam.bai"
     threads: 4
     output:
-        protected("mosdepth/{sample}.mosdepth.global.dist.txt"),
-        protected("mosdepth/{sample}.regions.bed.gz"),
+        protected("{aligner}/mosdepth/{sample}.mosdepth.global.dist.txt"),
+        protected("{aligner}/mosdepth/{sample}.regions.bed.gz"),
     params:
         windowsize = 500,
         prefix = "{sample}",
     log:
-        "logs/mosdepth/mosdepth_{sample}.log"
+        "logs/{aligner}/mosdepth/mosdepth_{sample}.log"
     shell:
         "mosdepth --threads {threads} \
                   -n \
@@ -373,11 +380,11 @@ rule mosdepth_get:
 
 rule mosdepth_combine:
     input:
-        expand("mosdepth/{sample}.regions.bed.gz", sample=config["samples"])
+        expand("{{aligner}}/mosdepth/{sample}.regions.bed.gz", sample=config["samples"])
     output:
-        "mosdepth/regions.combined.gz"
+        "{aligner}/mosdepth/regions.combined.gz"
     log:
-        "logs/mosdepth/mosdepth_combine.log"
+        "logs/{aligner}/mosdepth/mosdepth_combine.log"
     shell:
         os.path.join(workflow.basedir, "scripts/combine_mosdepth.py") + \
             " {input} -o {output} 2> {log}"
@@ -385,11 +392,11 @@ rule mosdepth_combine:
 
 rule mosdepth_global_plot:
     input:
-        expand("mosdepth/{sample}.mosdepth.global.dist.txt", sample=config["samples"])
+        expand("{{aligner}}/mosdepth/{sample}.mosdepth.global.dist.txt", sample=config["samples"])
     output:
-        "mosdepth_global_plot/global.html"
+        "{aligner}/mosdepth_global_plot/global.html"
     log:
-        "logs/mosdepth/mosdepth_global_plot.log"
+        "logs/{aligner}/mosdepth/mosdepth_global_plot.log"
     shell:
         os.path.join(workflow.basedir, "scripts/mosdepth_plot-dist.py") + \
             " {input} -o {output} 2> {log}"
@@ -397,12 +404,12 @@ rule mosdepth_global_plot:
 
 rule SV_length_plot:
     input:
-        "{caller}_{stage}/{sample}.vcf"
+        "{aligner}/{caller}_{stage}/{sample}.vcf"
     output:
-        plot = "SV-plots/SV-length_{caller}_{stage}_{sample}.png",
-        counts = "SV-plots/SV-nucleotides_affected_{caller}_{stage}_{sample}.txt",
+        plot = "{aligner}/SV-plots/SV-length_{caller}_{stage}_{sample}.png",
+        counts = "{aligner}/SV-plots/SV-nucleotides_affected_{caller}_{stage}_{sample}.txt",
     log:
-        "logs/svplot/svlength_{caller}_{stage}_{sample}.log"
+        "logs/{aligner}/svplot/svlength_{caller}_{stage}_{sample}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/SV-length-plot.py") + \
             " {input} --output {output.plot} --counts {output.counts} 2> {log}"
@@ -410,11 +417,11 @@ rule SV_length_plot:
 
 rule SV_plot_carriers:
     input:
-        "{caller}_combined/annot_genotypes.vcf"
+        "{aligner}/{caller}_combined/annot_genotypes.vcf"
     output:
-        "SV-plots/SV-{caller}_carriers.png"
+        "{aligner}/SV-plots/SV-{caller}_carriers.png"
     log:
-        "logs/svplot/svcarriers_{caller}.log"
+        "logs/{aligner}/svplot/svcarriers_{caller}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py") + \
             " {input} {output} 2> {log}"
@@ -422,11 +429,11 @@ rule SV_plot_carriers:
 
 rule sort_vcf:
     input:
-        "{caller}_combined/genotypes.vcf"
+        "{aligner}/{caller}_combined/genotypes.vcf"
     output:
-        temp("{caller}_combined/sorted_genotypes.vcf")
+        temp("{aligner}/{caller}_combined/sorted_genotypes.vcf")
     log:
-        "logs/sort_vcf/sorting_{caller}.log"
+        "logs/{aligner}/sort_vcf/sorting_{caller}.log"
     threads: 8
     shell:
         "vcf-sort {input} > {output} 2> {log}"
@@ -434,11 +441,11 @@ rule sort_vcf:
 
 rule annotate_vcf:
     input:
-        "{caller}_combined/sorted_genotypes.vcf"
+        "{aligner}/{caller}_combined/sorted_genotypes.vcf"
     output:
-        "{caller}_combined/annot_genotypes.vcf"
+        "{aligner}/{caller}_combined/annot_genotypes.vcf"
     log:
-        "logs/annotate_vcf/annotate_{caller}.log"
+        "logs/{aligner}/annotate_vcf/annotate_{caller}.log"
     params:
         conf = config["vcfanno_conf"],
     threads: 8
