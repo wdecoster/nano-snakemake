@@ -53,7 +53,7 @@ def aligner_to_symbol(calls):
     sorted by aligners
     """
     symbols = ['o', '+', 'x', 'v', '*', 'D', 's', 'p', '8', 'X']
-    aligners = set([c.aligner for c in calls])
+    aligners = sorted(set([c.aligner for c in calls]), reverse=True)
     aligner_to_symbol_dict = {a: s for a, s in zip(aligners, symbols)}
     for c in calls:
         c.shape = aligner_to_symbol_dict[c.aligner]
@@ -70,7 +70,7 @@ def caller_to_colour(calls):
     sorted by callers
     """
     colours = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    callers = set([c.caller for c in calls])
+    callers = sorted(set([c.caller for c in calls]), reverse=True)
     caller_to_colour_dict = {ca: co for ca, co in zip(callers, colours)}
     for c in calls:
         c.colour = caller_to_colour_dict[c.caller]
