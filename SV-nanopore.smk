@@ -1,5 +1,6 @@
 import os
 import gzip
+import sys
 
 configfile: "config.yaml"
 
@@ -24,6 +25,9 @@ def get_chromosomes(genome, annotation):
 
 
 CHROMOSOMES = get_chromosomes(config["genome"], config["annotbed"])
+if not CHROMOSOMES:
+    sys.exit("\n\nUnexpectedly no chromosomes were found for SV calling.\n"
+             "Is your annotation matching to your fasta file?\n\n")
 
 
 rule ngmlr:
