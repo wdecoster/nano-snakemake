@@ -187,9 +187,11 @@ rule samtools_split:
 
 rule nanosv_call:
     '''
+
     call variants using NanoSV on separate chromosomes
     the shell command will first check if there are reads in this chromosome
     and if not, will just touch the output and leave it empty
+    without raising an error
     '''
     input:
         bam = "{aligner}/alignment/{sample}-{chromosome}.bam",
