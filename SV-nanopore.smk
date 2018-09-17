@@ -196,6 +196,11 @@ rule split_bed:
 
 
 rule nanosv_call:
+    '''
+    call variants using NanoSV on separate chromosomes
+    the shell command will first check if there are reads in this chromosome
+    and if not, will just touch the output and leave it empty
+    '''
     input:
         bam = "{aligner}/alignment/{sample}-{chromosome}.bam",
         bai = "{aligner}/alignment/{sample}-{chromosome}.bam.bai",
@@ -210,11 +215,18 @@ rule nanosv_call:
     log:
         "logs/{aligner}/nanosv/{sample}-{chromosome}.log"
     shell:
-        "NanoSV --bed {input.bed} \
-                --threads {threads} \
-                --sambamba {params.samtools} {input.bam} \
-                -o {output} 2> {log}"
-
+        """
+        reads=$(samtools idxstats {input.bam} | awk 'BEGIN {{FS = "\\t"}} ; {{sum+=$3}} END {{print sum}}')
+        if [ "$reads" -eq "0" ]; then
+            touch {output} && \
+            echo "NanoSV: No reads in {input.bam}" >> exceptions.txt 2> {log}
+        else
+            NanoSV --bed {input.bed} \
+                    --threads {threads} \
+                    --sambamba {params.samtools} {input.bam} \
+                    -o {output} 2> {log}
+        fi
+        """
 
 rule cat_vcfs:
     input:
