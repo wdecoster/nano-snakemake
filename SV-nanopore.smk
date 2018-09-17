@@ -244,7 +244,7 @@ rule cat_vcfs:
     log:
         "logs/{aligner}/vcf-concat/{sample}.log"
     shell:
-        "vcf-concat {input} > {output} 2> {log}"
+        "vcf-concat {input} | vcf-sort > {output} 2> {log}"
 
 rule survivor:
     input:
