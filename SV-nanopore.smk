@@ -184,16 +184,6 @@ rule samtools_split:
     shell:
         "samtools view {input.bam} {params.chrom} -o {output} 2> {log}"
 
-rule split_bed:
-    input:
-        bed = config["annotbed"]
-    output:
-        expand("split_annotation_bed/{chromosome}.bed", chromosome=CHROMOSOMES)
-    log:
-        "logs/split_bed/split_annotation.log"
-    shell:
-        '''awk '{print $0 >> $1".bed"}' {input.bed} 2> {log}'''
-
 
 rule nanosv_call:
     '''
@@ -205,7 +195,6 @@ rule nanosv_call:
         bam = "{aligner}/alignment/{sample}-{chromosome}.bam",
         bai = "{aligner}/alignment/{sample}-{chromosome}.bam.bai",
         bed = config["annotbed"]
-        # bed = "split_annotation_bed/{chromosome}.bed"
     output:
         temp("{aligner}/split_nanosv_genotypes/{sample}-{chromosome}.vcf")
     params:
