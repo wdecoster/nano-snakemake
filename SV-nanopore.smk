@@ -228,9 +228,25 @@ rule nanosv_call:
         fi
         """
 
+rule bcftools_reheader:
+    input:
+        "{aligner}/split_nanosv_genotypes/{sample}-{chromosome}.vcf",
+    output:
+        vcf = temp("{aligner}/split_nanosv_genotypes_renamed/{sample}-{chromosome}.vcf"),
+        sample = temp("{aligner}/split_nanosv_genotypes_renamed/sample_{sample}-{chromosome}.txt")
+    params:
+        sample = "{sample}"
+    log:
+        "logs/{aligner}/bcftools_reheader/{sample}-{chromosome}.log"
+    shell:
+        """
+        echo {params.sample} > {output.sample} \
+        bcftools reheader -s {output.sample} {input} > {output.vcf}
+        """
+
 rule cat_vcfs:
     input:
-        expand("{{aligner}}/split_nanosv_genotypes/{{sample}}-{chromosome}.vcf",
+        expand("{{aligner}}/split_nanosv_genotypes_renamed/{{sample}}-{chromosome}.vcf",
                chromosome=CHROMOSOMES)
     output:
         "{aligner}/nanosv_genotypes/{sample}.vcf"
