@@ -231,7 +231,7 @@ rule bcftools_reheader:
         "logs/{aligner}/bcftools_reheader/{sample}-{chromosome}.log"
     shell:
         """
-        echo {params.sample} > {output.sample} \
+        echo {params.sample} > {output.sample} &&
         bcftools reheader -s {output.sample} {input} > {output.vcf}
         """
 
