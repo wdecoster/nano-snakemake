@@ -209,7 +209,8 @@ rule nanosv_call:
         """
         reads=$(samtools idxstats {input.bam} | awk 'BEGIN {{FS = "\\t"}} ; {{sum+=$3}} END {{print sum}}')
         if [ "$reads" -eq "0" ]; then
-            touch {output} && \
+            echo "##fileformat=VCFv4.1" > {output} && \
+            echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE" >> {output}
             echo "NanoSV: No reads in {input.bam}" >> exceptions.txt 2> {log}
         else
             NanoSV --bed {input.bed} \
