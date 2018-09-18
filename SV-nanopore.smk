@@ -232,7 +232,7 @@ rule bcftools_reheader:
     shell:
         """
         echo {params.sample} > {output.sample} &&
-        bcftools reheader -s {output.sample} {input} > {output.vcf}
+        bcftools reheader -s {output.sample} {input} > {output.vcf} 2> {log}
         """
 
 rule cat_vcfs:
