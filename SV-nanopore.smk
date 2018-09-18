@@ -190,7 +190,7 @@ rule nanosv_call:
 
     call variants using NanoSV on separate chromosomes
     the shell command will first check if there are reads in this chromosome
-    and if not, will just touch the output and leave it empty
+    and if not, it will just write a minimal vcf header to the output and leave it empty
     without raising an error
     '''
     input:
