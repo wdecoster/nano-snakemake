@@ -389,13 +389,14 @@ rule mosdepth_get:
     params:
         windowsize = 500,
         prefix = "{sample}",
+        aligner = "{aligner}"
     log:
         "logs/{aligner}/mosdepth/mosdepth_{sample}.log"
     shell:
         "mosdepth --threads {threads} \
                   -n \
                   --by {params.windowsize} \
-                  mosdepth/{params.prefix} {input.bam} 2> {log}"
+                  {aligner}/mosdepth/{params.prefix} {input.bam} 2> {log}"
 
 
 rule mosdepth_combine:
