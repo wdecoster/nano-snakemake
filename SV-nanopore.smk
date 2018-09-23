@@ -396,7 +396,7 @@ rule mosdepth_get:
         "mosdepth --threads {threads} \
                   -n \
                   --by {params.windowsize} \
-                  {aligner}/mosdepth/{params.prefix} {input.bam} 2> {log}"
+                  {params.aligner}/mosdepth/{params.prefix} {input.bam} 2> {log}"
 
 
 rule mosdepth_combine:
