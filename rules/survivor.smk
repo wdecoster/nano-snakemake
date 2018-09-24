@@ -12,7 +12,7 @@ rule survivor:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/{caller}/surivor_{stage}.log"
+        "logs/{aligner}/{caller}/survivor_{stage}.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -35,7 +35,7 @@ rule survivor_all:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/all/surivor.log"
+        "logs/{aligner}/all/survivor.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -56,7 +56,7 @@ rule survivor_pairwise_high_confidence:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/high_confidence/surivor_pairwise_{sample}.log"
+        "logs/{aligner}/high_confidence/survivor_pairwise_{sample}.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -77,7 +77,7 @@ rule survivor_combine_high_confidence:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/high_confidence_combined/surivor_high_confidence.log"
+        "logs/{aligner}/high_confidence_combined/survivor_high_confidence.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
@@ -112,7 +112,7 @@ rule survivor_pairwise_high_sensitivity:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/high_sensitivity/surivor_pairwise_{sample}.log"
+        "logs/{aligner}/high_sensitivity/survivor_pairwise_{sample}.log"
     shell:
         """
         bcftools concat -a {input} | bcftools sort - -o {output.vcf_unmerged} 2> {log}; \
@@ -136,7 +136,7 @@ rule survivor_combine_high_sensitivity:
         estimate_distance = -1,
         minimum_size = -1,
     log:
-        "logs/{aligner}/high_sensitivity_combined/surivor_high_sensitivity.log"
+        "logs/{aligner}/high_sensitivity_combined/survivor_high_sensitivity.log"
     shell:
         "ls {input} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
