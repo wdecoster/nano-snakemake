@@ -68,10 +68,10 @@ rule sort_vcf:
     output:
         temp("{aligner}/{caller}_combined/sorted_genotypes.vcf")
     log:
-        "logs/{aligner}/bcftools_sort/sorting_{caller}.log"
+        "logs/{aligner}/vcftools_sort/sorting_{caller}.log"
     threads: 8
     shell:
-        "bcftools sort {input} -o {output} 2> {log}"
+        "vcf-sort {input} > {output} 2> {log}"
 
 
 rule annotate_vcf:

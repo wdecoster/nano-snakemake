@@ -93,7 +93,7 @@ rule bgzip_and_tabix:
         "logs/{aligner}/bgzip-tabix/{caller}-{sample}.log"
     shell:
         """
-        sort -k1,1d -k2,2n {input} | bgzip > {output} 2> {log} &&
+        vcf-sort {input} | bgzip > {output} 2> {log} &&
         tabix -p vcf {output} 2>> {log}
         """
 
