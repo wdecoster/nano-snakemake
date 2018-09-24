@@ -1,3 +1,6 @@
+def get_samples(wildcards):
+    return config["samples"][wildcards.sample]
+
 rule minimap2_align:
     input:
         fq = get_samples,

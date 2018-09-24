@@ -1,3 +1,5 @@
+configfile: "config.yaml"
+
 rule mosdepth_get:
     input:
         bam = "{aligner}/alignment/{sample}.bam",

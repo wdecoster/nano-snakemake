@@ -11,32 +11,6 @@ include: "rules/vcf.smk"
 
 configfile: "config.yaml"
 
-
-def get_samples(wildcards):
-    return config["samples"][wildcards.sample]
-
-
-def get_chromosomes(genome, annotation):
-    '''
-    Gets the chromosome identifiers from the fasta genome and bed annotation
-    and returns the intersection of both
-    '''
-    fai = genome + ".fai"
-    if not os.path.isfile(fai):
-        sys.exit("Fasta index {} not found".format(fai))
-    fa_chr = set([i.split('\t')[0] for i in open(fai)])
-    if not os.path.isfile(annotation):
-        sys.exit("Annotation file {} not found".format(annotation))
-    annot_chr = set([line.split('\t')[0] for line in gzip.open(annotation, 'rt')])
-    return list(fa_chr & annot_chr)
-
-
-CHROMOSOMES = get_chromosomes(config["genome"], config["annotbed"])
-if not CHROMOSOMES:
-    sys.exit("\n\nUnexpectedly no chromosomes were found for SV calling.\n"
-             "Is your annotation matching to your fasta file?\n\n")
-
-
 ##### Target rules #####
 
 rule minimap2:
