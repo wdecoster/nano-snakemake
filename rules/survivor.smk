@@ -84,9 +84,22 @@ rule survivor_combine_high_confidence:
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output.vcf} 2> {log}"
 
+rule bgzip_and_tabix:
+    input:
+        "{aligner}/{caller}_genotypes/{sample}.vcf"
+    output:
+        "{aligner}/{caller}_genotypes/{sample}.vcf.gz"
+    log:
+        "logs/{aligner}/bgzip-tabix/{caller}-{sample}.log"
+    shell:
+        """
+        sort -k1,1d -k2,2n {input} | bgzip > {output} 2> {log} &&
+        tabix -p vcf {output} 2>> {log}
+        """
+
 rule survivor_pairwise_high_sensitivity:
     input:
-        expand("{{aligner}}/{caller}_genotypes/{{sample}}.vcf", caller=["sniffles", "nanosv"])
+        expand("{{aligner}}/{caller}_genotypes/{{sample}}.vcf.gz", caller=["sniffles", "nanosv"])
     output:
         vcf = temp("{aligner}/high_sensitivity/{sample}.vcf"),
         vcf_unmerged = temp("{aligner}/high_sensitivity/{sample}_unmerged.vcf"),
@@ -101,11 +114,13 @@ rule survivor_pairwise_high_sensitivity:
     log:
         "logs/{aligner}/high_sensitivity/surivor_pairwise_{sample}.log"
     shell:
-        "bcftools concat -a {input} | bcftools sort - -o {output.vcf_unmerged} 2> {log}; \
+        """
+        bcftools concat -a {input} | bcftools sort - -o {output.vcf_unmerged} 2> {log}; \
         ls {output.vcf_unmerged} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
-        {params.minimum_size} {output.vcf} 2>> {log}"
+        {params.minimum_size} {output.vcf} 2>> {log}
+        """
 
 rule survivor_combine_high_sensitivity:
     input:
