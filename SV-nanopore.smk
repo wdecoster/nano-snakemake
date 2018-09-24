@@ -233,7 +233,7 @@ rule bcftools_reheader:
     shell:
         """
         echo {params.sample} > {output.sample} &&
-        bcftools reheader -s {output.sample} {input} > {output.vcf} 2> {log}
+        bcftools reheader -s {output.sample} {input} -o {output.vcf} 2> {log}
         """
 
 rule bcftools_reheader_sniffles:
@@ -250,7 +250,7 @@ rule bcftools_reheader_sniffles:
     shell:
         """
         echo {params.sample} > {output.sample} &&
-        bcftools reheader -s {output.sample} {input} > {output.vcf} 2> {log}
+        bcftools reheader -s {output.sample} {input} -o {output.vcf} 2> {log}
         """
 
 rule cat_vcfs:
@@ -367,7 +367,7 @@ rule survivor_pairwise_high_sensitivity:
     log:
         "logs/{aligner}/high_sensitivity/surivor_pairwise_{sample}.log"
     shell:
-        "bcftools concat {input} | bcftools sort - -o {output.vcf_unmerged} 2> {log}; \
+        "bcftools concat -a {input} | bcftools sort - -o {output.vcf_unmerged} 2> {log}; \
         ls {output.vcf_unmerged} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
