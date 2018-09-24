@@ -350,7 +350,7 @@ rule survivor_pairwise_high_sensitivity:
     log:
         "logs/{aligner}/high_sensitivity/surivor_pairwise_{sample}.log"
     shell:
-        "vcf-concat {input} | vcf-sort > {output.vcf_unmerged} ; \
+        "bcftools concat {input} | bcftools sort - -o {output.vcf_unmerged} ; \
         ls {output.vcf_unmerged} > {output.fofn} ; \
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
