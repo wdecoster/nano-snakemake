@@ -457,7 +457,7 @@ rule sort_vcf:
         "logs/{aligner}/sort_vcf/sorting_{caller}.log"
     threads: 8
     shell:
-        "vcf-sort {input} > {output} 2> {log}"
+        "bcftools sort {input} -o {output} 2> {log}"
 
 
 rule annotate_vcf:
