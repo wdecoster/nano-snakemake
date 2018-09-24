@@ -161,7 +161,7 @@ rule sniffles_genotype:
         bam = "{aligner}/alignment/{sample}.bam",
         ivcf = "{aligner}/sniffles_combined/calls.vcf"
     output:
-        "{aligner}/sniffles_genotypes/{sample}.vcf"
+        "{aligner}/sniffles_genotypes_temp/{sample}.vcf"
     threads: 8
     log:
         "logs/{aligner}/sniffles_genotype/{sample}.log"
@@ -230,6 +230,23 @@ rule bcftools_reheader:
         sample = "{sample}"
     log:
         "logs/{aligner}/bcftools_reheader/{sample}-{chromosome}.log"
+    shell:
+        """
+        echo {params.sample} > {output.sample} &&
+        bcftools reheader -s {output.sample} {input} > {output.vcf} 2> {log}
+        """
+
+rule bcftools_reheader_sniffles:
+    """Rule to be deleted as soon as ngmlr uses read groups correctly"""
+    input:
+        "{aligner}/sniffles_genotypes_temp/{sample}.vcf"
+    output:
+        vcf = temp("{aligner}/sniffles_genotypes/{sample}.vcf"),
+        sample = temp("{aligner}/sniffles_genotypes/sample_{sample}.txt")
+    params:
+        sample = "{sample}"
+    log:
+        "logs/{aligner}/bcftools_reheader/{sample}.log"
     shell:
         """
         echo {params.sample} > {output.sample} &&
