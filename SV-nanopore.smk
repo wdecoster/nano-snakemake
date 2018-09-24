@@ -243,7 +243,7 @@ rule cat_vcfs:
     output:
         "{aligner}/nanosv_genotypes/{sample}.vcf"
     log:
-        "logs/{aligner}/vcf-concat/{sample}.log"
+        "logs/{aligner}/bcftools-concat/{sample}.log"
     shell:
         "bcftools concat {input} | bcftools sort - -o {output} 2> {log}"
 
@@ -454,7 +454,7 @@ rule sort_vcf:
     output:
         temp("{aligner}/{caller}_combined/sorted_genotypes.vcf")
     log:
-        "logs/{aligner}/sort_vcf/sorting_{caller}.log"
+        "logs/{aligner}/bcftools_sort/sorting_{caller}.log"
     threads: 8
     shell:
         "bcftools sort {input} -o {output} 2> {log}"
