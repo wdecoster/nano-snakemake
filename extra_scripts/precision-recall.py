@@ -2,6 +2,7 @@ import subprocess
 from argparse import ArgumentParser
 import shlex
 import sys
+import os
 from cyvcf2 import VCF
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
@@ -15,7 +16,7 @@ def main():
         ignore_type = "-1"
     else:
         ignore_type = "1"
-    combined_vcf = survivor(samples=[args.truth, args.test],
+    combined_vcf = survivor(samples=[normalize_vcf(s) for s in [args.truth, args.test]],
                             distance=args.distance,
                             ignore_type=ignore_type,
                             minlength=args.minlength)
@@ -25,6 +26,15 @@ def main():
     print(f"Recall: {round(100 * tp / len(truth_set), ndigits=1)}%")
     if args.bar:
         bar_chart(combined_vcf)
+
+
+def normalize_vcf(vcff):
+    handle, name = tempfile.mkstemp()
+    out = open(name, 'w')
+    for line in open(vcff):
+        out.write(line.replace('DUP', 'INS'))
+    os.close(handle)
+    return name
 
 
 def survivor(samples, distance, ignore_type, minlength):
@@ -38,14 +48,16 @@ def survivor(samples, distance, ignore_type, minlength):
     -estimate distance between calls (no)
     -specify minimal size of SV event (args.minlength)
     """
-    fofn_f = tempfile.mkstemp()[1]
-    vcf_out = tempfile.mkstemp()[1]
+    fhf, fofn_f = tempfile.mkstemp()
+    fhv, vcf_out = tempfile.mkstemp()
     with open(fofn_f, 'w') as fofn:
         for s in samples:
             fofn.write(s + "\n")
     survivor_cmd = f"SURVIVOR merge {fofn_f} {distance} 1 {ignore_type} -1 -1 {minlength} {vcf_out}"
     sys.stderr.write("Executing SURVIVOR...\n")
     subprocess.call(shlex.split(survivor_cmd), stdout=subprocess.DEVNULL)
+    os.close(fhf)
+    os.close(fhv)
     return vcf_out
 
 
