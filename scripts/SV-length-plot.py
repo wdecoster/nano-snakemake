@@ -17,7 +17,9 @@ def main():
     with open(args.counts, 'w') as counts:
         counts.write("Number of nucleotides affected by SV:\n")
         for svtype, lengths in len_dict.items():
-            counts.write("{}:\t{} variants\t{}bp\n".format(svtype, len(lengths), sum(lengths)))
+            lengths_svs = [i for i in lengths if i > 50]
+            counts.write("{}:\t{} variants\t{}bp\n".format(
+                svtype, len(lengths_svs), sum(lengths_svs)))
     make_plot(dict_of_lengths=len_dict,
               output=args.output)
 
