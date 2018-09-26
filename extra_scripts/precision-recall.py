@@ -104,7 +104,6 @@ def bar_chart(vcf, outname="stacked_bar.png"):
              bins=[i for i in range(0, 2000, 10)],
              stacked=True,
              histtype='bar',
-             color=['#1c9b00', 'red', 'orange'],
              label=list(len_dict.keys()))
     plt.xlabel('Lenghth of structural variant')
     plt.ylabel('Number of variants')
@@ -115,7 +114,6 @@ def bar_chart(vcf, outname="stacked_bar.png"):
              bins=[i for i in range(0, 20000, 100)],
              stacked=True,
              histtype='bar',
-             color=['#1c9b00', 'red', 'orange'],
              label=list(len_dict.keys()),
              log=True)
     plt.xlabel('Lenghth of structural variant')
