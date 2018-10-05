@@ -72,3 +72,16 @@ rule nanosv_call:
                     -o {output} 2> {log}
         fi
         """
+
+rule npinv:
+    input:
+        bam = "{aligner}/alignment/{sample}.bam",
+        bai = "{aligner}/alignment/{sample}.bam.bai",
+    output:
+        "{aligner} / npinv / {sample}.vcf
+    log:
+        "logs/{aligner}/npinv/{sample}.log"
+    shell:
+        "java -jar npInv1.21.jar \
+          --input {input} \
+          --output {output}"
