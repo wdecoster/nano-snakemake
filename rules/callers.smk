@@ -78,10 +78,12 @@ rule npinv:
         bam = "{aligner}/alignment/{sample}.bam",
         bai = "{aligner}/alignment/{sample}.bam.bai",
     output:
-        "{aligner} / npinv / {sample}.vcf
+        "{aligner}/npinv/{sample}.vcf"
     log:
         "logs/{aligner}/npinv/{sample}.log"
     shell:
-        "java -jar npInv1.21.jar \
+        """
+        java -jar npInv1.21.jar \
           --input {input} \
-          --output {output}"
+          --output {output}
+        """
