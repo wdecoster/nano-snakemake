@@ -1,6 +1,6 @@
 samples:
-    sampleA: /path/to/sampleC/fastq
-    sampleB: /path/to/sampleC/fastq
+    sampleA: /path/to/sampleA/fastq
+    sampleB: /path/to/sampleB/fastq
     sampleC: /path/to/sampleC/fastq
 
 genome:
