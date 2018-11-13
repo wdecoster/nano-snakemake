@@ -43,7 +43,8 @@ def main():
                                         labels=callers,
                                         loc='lower left',
                                         frameon=False))
-    plt.show()
+    plt.tight_layout()
+    plt.savefig("precision-recall.png")
 
 
 def aligner_to_symbol(calls):
