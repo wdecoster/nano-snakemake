@@ -69,7 +69,7 @@ def caller_to_colour(calls):
     return a list of indices for which each caller is found uniquely and all callers
     sorted by callers
     """
-    colours = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    colours = plt.rcParams['axes.prop_cycle'].by_key()['color'] * 10
     callers = sorted(set([c.caller for c in calls]), reverse=True)
     caller_to_colour_dict = {ca: co for ca, co in zip(callers, colours)}
     for c in calls:
