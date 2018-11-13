@@ -105,7 +105,7 @@ def bar_chart(vcf, outname="stacked_bar.png"):
              stacked=True,
              histtype='bar',
              label=list(len_dict.keys()))
-    plt.xlabel('Lenghth of structural variant')
+    plt.xlabel('Length of structural variant')
     plt.ylabel('Number of variants')
     plt.legend(frameon=False,
                fontsize="small")
@@ -116,7 +116,7 @@ def bar_chart(vcf, outname="stacked_bar.png"):
              histtype='bar',
              label=list(len_dict.keys()),
              log=True)
-    plt.xlabel('Lenghth of structural variant')
+    plt.xlabel('Length of structural variant')
     plt.ylabel('Number of variants')
     plt.legend(frameon=False,
                fontsize="small")

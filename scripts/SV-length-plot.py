@@ -45,7 +45,7 @@ def make_plot(dict_of_lengths, output):
              stacked=True,
              histtype='bar',
              label=names)
-    plt.xlabel('Lenghth of structural variant')
+    plt.xlabel('Length of structural variant')
     plt.ylabel('Number of variants')
     plt.legend(frameon=False,
                fontsize="small")
@@ -57,7 +57,7 @@ def make_plot(dict_of_lengths, output):
              histtype='bar',
              label=names,
              log=True)
-    plt.xlabel('Lenghth of structural variant')
+    plt.xlabel('Length of structural variant')
     plt.ylabel('Number of variants')
     plt.legend(frameon=False,
                fontsize="small")
