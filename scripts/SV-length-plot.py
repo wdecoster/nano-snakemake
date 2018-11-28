@@ -14,15 +14,15 @@ def main():
     for v in VCF(args.vcf):
         if not v.INFO.get('SVTYPE') == 'TRA':
             try:
-                len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
+                if abs(v.INFO.get('SVLEN')) >= 50:
+                    len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
             except TypeError:
                 sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
     with open(args.counts, 'w') as counts:
         counts.write("Number of nucleotides affected by SV:\n")
         for svtype, lengths in len_dict.items():
-            lengths_svs = [i for i in lengths if i >= 50]
             counts.write("{}:\t{} variants\t{}bp\n".format(
-                svtype, len(lengths_svs), sum(lengths_svs)))
+                svtype, len(lengths), sum(lengths)))
     make_plot(dict_of_lengths=len_dict,
               output=args.output)
 
@@ -41,7 +41,8 @@ def make_plot(dict_of_lengths, output):
     spec_order = sorted([i for i in dict_of_lengths.keys() if i not in standard_order])
     sorter = standard_order + spec_order
     names, lengths = zip(
-        *sorted([(k, v) for k, v in dict_of_lengths.items()], key=lambda x: sorter.index(x[0])))
+        *sorted([(k, v) for k, v in dict_of_lengths.items()],
+                key=lambda x: sorter.index(x[0])))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
              bins=[i for i in range(0, 2000, 10)],
