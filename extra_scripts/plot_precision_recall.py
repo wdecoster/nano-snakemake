@@ -16,8 +16,8 @@ class Callset(object):
         self.colour = None
 
     def plot(self):
-        return plt.scatter(x=self.precision,
-                           y=self.recall,
+        return plt.scatter(x=self.recall,
+                           y=self.precision,
                            c=self.colour,
                            marker=self.shape,
                            alpha=self.opacity)
@@ -31,8 +31,8 @@ def main():
     lines = [c.plot() for c in calls]
     plt.xlim(0, 100)
     plt.ylim(0, 100)
-    plt.xlabel('Precision')
-    plt.ylabel('Recall')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
     if len(aligners) > 1:
         plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
                                         labels=aligners,
