@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-
+import sys
 from cyvcf2 import VCF
 from collections import defaultdict
 from argparse import ArgumentParser
@@ -13,7 +13,10 @@ def main():
     len_dict = defaultdict(list)
     for v in VCF(args.vcf):
         if not v.INFO.get('SVTYPE') == 'TRA':
-            len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
+            try:
+                len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
+            except TypeError:
+                sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
     with open(args.counts, 'w') as counts:
         counts.write("Number of nucleotides affected by SV:\n")
         for svtype, lengths in len_dict.items():
