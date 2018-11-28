@@ -36,12 +36,12 @@ def main():
     if len(aligners) > 1:
         plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
                                         labels=aligners,
-                                        loc='upper left',
+                                        loc='upper {}'.format(args.legend),
                                         frameon=False))
     if len(callers) > 1:
         plt.gca().add_artist(plt.legend(handles=[lines[i] for i in caller_index],
                                         labels=callers,
-                                        loc='lower left',
+                                        loc='lower {}'.format(args.legend),
                                         frameon=False))
     plt.tight_layout()
     plt.savefig("precision-recall.png")
@@ -89,6 +89,9 @@ def get_args():
                         help="A maximum value to which precision recall plot has to be limited",
                         type=int,
                         default=100)
+    parser.add_argument("--legend",
+                        help="Put legend left or right",
+                        default="left")
     return parser.parse_args()
 
 
