@@ -29,8 +29,8 @@ def main():
     aligner_index, aligners = aligner_to_symbol(calls)
     caller_index, callers = caller_to_colour(calls)
     lines = [c.plot() for c in calls]
-    plt.xlim(0, 100)
-    plt.ylim(0, 100)
+    plt.xlim(0, args.max)
+    plt.ylim(0, args.max)
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     if len(aligners) > 1:
@@ -83,8 +83,12 @@ def caller_to_colour(calls):
 
 def get_args():
     parser = ArgumentParser(description="Plot precision and recall for multiple callsets")
-    parser.add_argument(
-        "results", help="A tsv file with aligner caller precision recall")
+    parser.add_argument("results",
+                        help="A tsv file with aligner caller precision recall")
+    parser.add_argument("--max",
+                        help="A maximum value to which precision recall plot has to be limited",
+                        type=int,
+                        default=100)
     return parser.parse_args()
 
 
