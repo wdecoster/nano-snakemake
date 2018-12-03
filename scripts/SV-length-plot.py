@@ -41,7 +41,7 @@ def make_plot(dict_of_lengths, output):
     spec_order = sorted([i for i in dict_of_lengths.keys() if i not in standard_order])
     sorter = standard_order + spec_order
     names, lengths = zip(
-        *sorted([(k, v) for k, v in dict_of_lengths.items()],
+        *sorted([(svtype, lengths) for svtype, lengths in dict_of_lengths.items()],
                 key=lambda x: sorter.index(x[0])))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
