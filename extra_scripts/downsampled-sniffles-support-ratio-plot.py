@@ -29,9 +29,12 @@ def main():
                    y=df[feat],
                    label=feat,
                    s=3)
-    plt.legend(loc="lower right")
+    plt.legend(loc="lower left")
+    plt.axvline(x=0.25)
+    plt.axvline(x=0.33)
     plt.xlabel("Ratio support/coverage")
     plt.ylim(0, 100)
+    plt.title("Sniffles minimal support")
     plt.tight_layout()
     plt.savefig("sniffles_support-vs-pr.png")
 
