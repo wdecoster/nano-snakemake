@@ -29,7 +29,7 @@ def main():
                    y=df[feat],
                    label=feat,
                    s=3)
-    plt.legend(loc="center left")
+    plt.legend(loc="center right")
     plt.axvline(x=0.25)
     plt.axvline(x=0.33)
     plt.xlabel("Ratio support/coverage")
