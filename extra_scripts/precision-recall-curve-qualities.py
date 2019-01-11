@@ -21,15 +21,21 @@ def main():
                             ignore_type=ignore_type,
                             minlength=args.minlength)
     variants = extract_variants(combined_vcf)
-    quals = get_qualities_from_test(args.test)
-    variants["qual_test"] = match_qualities_with_coords(variants["coords_test"], quals)
-    res = pd.DataFrame(data=[precision_recall(variants.loc[variants["qual_test"] > q])
-                             for q in variants["qual_test"].unique()],
-                       columns=["precision", "recall"])
-    res.plot(x="precision", y="recall", kind="scatter")
+    res = pd.DataFrame(
+        data=[precision_recall(variants, q) for q in variants["quals_test"].unique()],
+        columns=["precision", "recall", "quality"]) \
+        .sort_values(by="quality")
+    res.plot(x="precision",
+             y="recall",
+             kind="line",
+             legend=False,
+             title="SVIM performance on NA19240")
     plt.xlim(0, 100)
     plt.ylim(0, 100)
-    plt.show()
+    plt.xlabel("Precision")
+    plt.ylabel("Recall")
+    plt.tight_layout()
+    plt.savefig("precision-recall-curve.png")
 
 
 def normalize_vcf(vcff):
@@ -77,8 +83,10 @@ def is_variant(call):
 
 def extract_variants(vcf):
     return pd.DataFrame(
-        data=[tuple(v.format('CO')) + tuple([is_variant(call) for call in v.gt_types])
-              + parse_qualities(v.format('QV')) for v in VCF(vcf)],
+        data=[
+            tuple(v.format('CO')) +
+            tuple([is_variant(call) for call in v.gt_types]) +
+            parse_qualities(v.format('QV')) for v in VCF(vcf)],
         columns=["coords_truth", "coords_test", "truth", "test", "quals_truth", "quals_test"])
 
 
@@ -92,6 +100,7 @@ def precision_recall(df, qual):
     if tp == 0:
         return 0, 0
     else:
+        return 100 * (tp / sum(tests)), 100 * (tp / sum(df["truth"])), qual
 
 
 def get_args():
