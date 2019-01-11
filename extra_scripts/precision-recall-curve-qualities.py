@@ -86,12 +86,12 @@ def parse_qualities(quals):
     return tuple([np.median([int(q) for q in s.split(',')]) if s != 'NaN' else 0 for s in quals])
 
 
-def precision_recall(df):
-    tp = sum(df["truth"] & df["test"])
+def precision_recall(df, qual):
+    tests = (df["test"] & (df["quals_test"] > qual))
+    tp = sum(df["truth"] & tests)
     if tp == 0:
         return 0, 0
     else:
-        return 100 * (tp / sum(df["test"])), 100 * (tp / sum(df["truth"]))
 
 
 def get_args():
