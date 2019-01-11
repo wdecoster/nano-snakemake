@@ -77,22 +77,13 @@ def is_variant(call):
 
 def extract_variants(vcf):
     return pd.DataFrame(
-        data=[tuple(v.format('CO')) + tuple([is_variant(call)
-                                             for call in v.gt_types]) for v in VCF(vcf)],
-        columns=["coords_truth", "coords_test", "truth", "test"])
+        data=[tuple(v.format('CO')) + tuple([is_variant(call) for call in v.gt_types])
+              + parse_qualities(v.format('QV')) for v in VCF(vcf)],
+        columns=["coords_truth", "coords_test", "truth", "test", "quals_truth", "quals_test"])
 
 
-def get_qualities_from_test(testvcf):
-    return pd.DataFrame(
-        data=[(v.CHROM + "_" + str(v.start + 1) + "-" + v.CHROM + "_" + str(v.end), v.QUAL)
-              for v in VCF(testvcf)],
-        columns=["coords", "qual"]
-    ).set_index("coords")
-
-
-def match_qualities_with_coords(coords, quals):
-    return [np.mean([quals.loc[v] if v != 'NaN' else 0 for v in variant.split(',')])
-            for variant in coords]
+def parse_qualities(quals):
+    return tuple([np.median([int(q) for q in s.split(',')]) if s != 'NaN' else 0 for s in quals])
 
 
 def precision_recall(df):
