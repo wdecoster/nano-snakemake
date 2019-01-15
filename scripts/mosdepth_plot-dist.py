@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# code taken from https://github.com/brentp/mosdepth/blob/master/scripts/plot-dist.py
+# code originally taken from https://github.com/brentp/mosdepth/blob/master/scripts/plot-dist.py
 
 import sys
 import string
