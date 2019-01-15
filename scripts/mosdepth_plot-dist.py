@@ -67,7 +67,7 @@ def main():
     var layout = {
         hovermode: 'closest',
         xaxis: {title: 'Coverage'},
-        yaxis: {title: 'Proportion of bases at coverage', domain: [0, 1], dtick: 0.25},
+        yaxis: {title: 'Proportion of bases at minimum coverage', domain: [0, 1], dtick: 0.25},
         showlegend: $showlegend,
         autosize: true,
         legend: {
