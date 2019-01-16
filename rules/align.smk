@@ -1,6 +1,7 @@
 def get_samples(wildcards):
     return config["samples"][wildcards.sample]
 
+
 rule minimap2_align:
     input:
         fq = get_samples,
@@ -12,7 +13,7 @@ rule minimap2_align:
     log:
         "logs/minimap2/{sample}.log"
     shell:
-        "minimap2 --MD -a -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
+        "minimap2 --MD -ax map-ont -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
 rule ngmlr_align:
@@ -41,7 +42,7 @@ rule minimap2_last_like_align:
     log:
         "logs/minimap2_last_like/{sample}.log"
     shell:
-        "minimap2 --MD -a  --no-long-join -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
+        "minimap2 --MD -ax map-ont --no-long-join -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
 
