@@ -20,7 +20,8 @@ def main():
     combined_vcf = survivor(samples=[normalize_vcf(s) for s in args.variants],
                             distance=args.distance,
                             ignore_type=ignore_type,
-                            minlength=args.minlength)
+                            minlength=args.minlength,
+                            save=args.store)
     upsets = make_sets(vcf=combined_vcf,
                        names=args.names or args.variants)
     plot(upsets, sort_by='cardinality')
@@ -36,7 +37,7 @@ def normalize_vcf(vcff):
     return name
 
 
-def survivor(samples, distance, ignore_type, minlength):
+def survivor(samples, distance, ignore_type, minlength, save=False):
     """
     Executes SURVIVOR merge, with parameters:
     -samples.fofn (truth and test)
@@ -48,7 +49,10 @@ def survivor(samples, distance, ignore_type, minlength):
     -specify minimal size of SV event (args.minlength)
     """
     fhf, fofn_f = tempfile.mkstemp()
-    fhv, vcf_out = tempfile.mkstemp()
+    if save:
+        vcf_out = "overlapping-variants.vcf"
+    else:
+        fhv, vcf_out = tempfile.mkstemp()
     with open(fofn_f, 'w') as fofn:
         for s in samples:
             fofn.write(s + "\n")
@@ -56,7 +60,8 @@ def survivor(samples, distance, ignore_type, minlength):
     sys.stderr.write("Executing SURVIVOR...\n")
     subprocess.call(shlex.split(survivor_cmd), stdout=subprocess.DEVNULL)
     os.close(fhf)
-    os.close(fhv)
+    if not save:
+        os.close(fhv)
     return vcf_out
 
 
@@ -102,6 +107,9 @@ def get_args():
                         default=50)
     parser.add_argument("-i", "--ignore_type",
                         help="Ignore the type of the structural variant",
+                        action="store_true")
+    parser.add_argument("--store",
+                        help="Save vcf of overlapping calls",
                         action="store_true")
     args = parser.parse_args()
     if args.names:
