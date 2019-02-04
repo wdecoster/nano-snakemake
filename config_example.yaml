@@ -14,5 +14,3 @@ vcfanno_conf:
 
 parameters:
     survivor_distance: 500
-    survivor_high_confidence_distance: 500
-    survivor_high_sensitivity_distance: 100
