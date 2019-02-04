@@ -18,7 +18,8 @@ A set of [snakemake](https://snakemake.readthedocs.io/en/stable/) pipelines for 
   - [samtools](https://github.com/samtools/samtools)
   - [matplotlib](https://github.com/matplotlib/matplotlib)
   - [seaborn](https://github.com/mwaskom/seaborn)
-- methylation analysis using nanopolish [not yet written]
+
+These dependencies can be installed using `conda create -f environment.yaml`
 
 
 The folder "scripts" contains scripts necessary for the pipeline.   
