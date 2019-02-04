@@ -16,6 +16,27 @@ rule minimap2_align:
         "minimap2 --MD -ax map-ont -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"
 
+rule minimap2-pbsv_align:
+    input:
+        fq = get_samples,
+        genome = config["genome"]
+    output:
+        "minimap2_pbsv/alignment/{sample}.bam"
+    threads:
+        8
+    params:
+        sample = "{sample}"
+    log:
+        "logs/minimap2_pbsv/{sample}.log"
+    shell:
+
+        """
+        minimap2 -ax map-ont --eqx -L -O 5,56 -E 4,1 -B 5 \
+         --secondary=no -z 400,50 -r 2k -Y \
+         -R "@RG\tID:rg1a\tSM:{params.sample}" \
+         -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
+         samtools sort -@ {threads} -o {output} - 2> {log}"""
+
 rule ngmlr_align:
     input:
         fq = get_samples,

@@ -31,6 +31,22 @@ rule minimap2:
         "minimap2/mosdepth_global_plot/global.html",
 
 
+rule minimap2_pbsv:
+    input:
+        expand("minimap2_pbsv/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "nanosv"]),
+        expand("minimap2_pbsv/SV-plots/SV-{caller}_carriers.png",
+               caller=["sniffles", "nanosv"]),
+        expand("minimap2_pbsv/{caller}_combined/annot_genotypes.vcf",
+               caller=["sniffles", "nanosv"]),
+        expand("minimap2_pbsv/alignment_stats/{sample}.txt",
+               sample=config["samples"]),
+        "minimap2_pbsv/all_combined/annot_genotypes.vcf",
+        "minimap2_pbsv/mosdepth/regions.combined.gz",
+        "minimap2_pbsv/mosdepth_global_plot/global.html",
+
+
 rule minimap2_last_like:
     input:
         expand("minimap2_last_like/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
