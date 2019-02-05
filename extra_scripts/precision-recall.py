@@ -22,8 +22,12 @@ def main():
                             minlength=args.minlength)
     truth_set, test_set = make_venn(combined_vcf)
     tp = len(truth_set & test_set)
-    print(f"Precision: {round(100 * tp / len(test_set), ndigits=1)}%")
-    print(f"Recall: {round(100 * tp / len(truth_set), ndigits=1)}%")
+    precision = tp / len(test_set)
+    recall = tp / len(truth_set)
+    fmeasure = 2*(precision*recall)/(precision + recall)
+    print(f"Precision: {round(100 * precision, ndigits=1)}%")
+    print(f"Recall: {round(100 * recall, ndigits=1)}%")
+    print(f"F-measure: {round(fmeasure, ndigits=4)}")
     if args.bar:
         bar_chart(combined_vcf)
 
