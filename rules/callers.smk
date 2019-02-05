@@ -82,11 +82,7 @@ rule npinv:
     log:
         "logs/{aligner}/npinv/{sample}.log"
     shell:
-        """
-        npinv \
-          --input {input} \
-          --output {output}
-        """
+        "npinv --input {input} --output {output}"
 
 rule pbsv:
     input:
