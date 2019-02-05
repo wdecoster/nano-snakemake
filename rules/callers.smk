@@ -83,7 +83,7 @@ rule npinv:
         "logs/{aligner}/npinv/{sample}.log"
     shell:
         """
-        java -jar npInv1.21.jar \
+        npinv \
           --input {input} \
           --output {output}
         """
