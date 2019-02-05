@@ -28,7 +28,7 @@ rule minimap2:
         "minimap2/mosdepth/regions.combined.gz",
         "minimap2/mosdepth_global_plot/global.html",
         expand("minimap2/npinv/{sample}.vcf",
-               sample=config["samples"])
+               sample=config["samples"]),
 
 rule minimap2_pbsv:
     input:
@@ -45,7 +45,7 @@ rule minimap2_pbsv:
         "minimap2_pbsv/mosdepth/regions.combined.gz",
         "minimap2_pbsv/mosdepth_global_plot/global.html",
         expand("minimap2_pbsv/npinv/{sample}.vcf",
-               sample=config["samples"])
+               sample=config["samples"]),
 
 rule minimap2_last_like:
     input:
@@ -59,7 +59,7 @@ rule minimap2_last_like:
         expand("minimap2_last_like/alignment_stats/{sample}.txt",
                sample=config["samples"]),
         expand("minimap2_last_like/npinv/{sample}.vcf",
-               sample=config["samples"])
+               sample=config["samples"]),
         "minimap2_last_like/all_combined/annot_genotypes.vcf",
         "minimap2_last_like/mosdepth/regions.combined.gz",
         "minimap2_last_like/mosdepth_global_plot/global.html",
@@ -77,7 +77,7 @@ rule ngmlr:
         expand("ngmlr/alignment_stats/{sample}.txt",
                sample=config["samples"]),
         expand("ngmlr/npinv/{sample}.vcf",
-               sample=config["samples"])
+               sample=config["samples"]),
         "ngmlr/all_combined/annot_genotypes.vcf",
         "ngmlr/mosdepth/regions.combined.gz",
         "ngmlr/mosdepth_global_plot/global.html",
