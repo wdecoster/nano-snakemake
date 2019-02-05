@@ -87,3 +87,19 @@ rule npinv:
           --input {input} \
           --output {output}
         """
+
+rule pbsv:
+    input:
+        bam = "minimap2_pbsv/alignment/{sample}.bam",
+        bai = "minimap2_pbsv/alignment/{sample}.bam.bai",
+        genome = genome = config["genome"]
+    output:
+        vcf = "minimap2_pbsv/pbsv/{sample}.vcf",
+        svsig = temp("minimap2_pbsv/pbsv/{sample}.svsig.gz)
+    log:
+        "logs/minimap2_pbsv/pbsv/{sample}.log"
+    shell:
+        """
+        pbsv discover {input.bam} {output.svsig} && \
+        pbsv call {input.genome} {output.svsig} {output.vcf}
+        """
