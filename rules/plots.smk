@@ -20,4 +20,4 @@ rule SV_plot_carriers:
         "logs/{aligner}/svplot/svcarriers_{caller}.log"
     shell:
         os.path.join(workflow.basedir, "scripts/SV-carriers-plot.py") + \
-            " {input} {output} 2> {log}"
+            " {input} --output {output} 2> {log}"
