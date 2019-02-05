@@ -60,7 +60,8 @@ rule nanosv_call:
         "logs/{aligner}/nanosv/{sample}-{chromosome}.log"
     shell:
         """
-        reads=$(samtools idxstats {input.bam} | awk 'BEGIN {{FS = "\\t"}} ; {{sum+=$3}} END {{print sum}}')
+        reads=$(samtools idxstats {input.bam} | \
+          awk 'BEGIN {{FS = "\\t"}} ; {{sum+=$3}} END {{print sum}}')
         if [ "$reads" -eq "0" ]; then
             echo "##fileformat=VCFv4.1" > {output} && \
             echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE" >> {output}
