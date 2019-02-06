@@ -23,7 +23,7 @@ rule survivor_all:
     input:
         expand("{{aligner}}/{caller}_genotypes/{sample}.vcf",
                sample=config["samples"],
-               caller=["sniffles", "nanosv"])
+               caller=["sniffles", "svim", "nanosv"])
     output:
         vcf = temp("{aligner}/all_combined/genotypes.vcf"),
         fofn = temp("{aligner}/all_combined/samples.fofn")
@@ -41,6 +41,7 @@ rule survivor_all:
         SURVIVOR merge {output.fofn} {params.distance} {params.caller_support} \
         {params.same_type} {params.same_strand} {params.estimate_distance}  \
         {params.minimum_size} {output.vcf} 2> {log}"
+
 
 rule bgzip_and_tabix:
     input:

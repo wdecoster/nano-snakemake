@@ -17,7 +17,12 @@ def main():
                 if abs(v.INFO.get('SVLEN')) >= 50:
                     len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
             except TypeError:
-                sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
+                if v.INFO.get('SVTYPE') == 'INV':
+                    if (v.end - v.start) >= 50:
+                        len_dict[v.INFO.get('SVTYPE')].append(v.end - v.start)
+                        sys.stderr.write("SVLEN field missing. Inferred SV length from END and POS:\n{}\n\n".format(v))
+                else:
+                    sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
     with open(args.counts, 'w') as counts:
         counts.write("Number of nucleotides affected by SV:\n")
         for svtype, lengths in len_dict.items():

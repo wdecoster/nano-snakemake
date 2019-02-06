@@ -9,6 +9,7 @@ A set of [snakemake](https://snakemake.readthedocs.io/en/stable/) pipelines for 
   - [ngmlr](https://github.com/philres/ngmlr)
   - [sniffles](https://github.com/fritzsedlazeck/Sniffles)
   - [NanoSV](https://github.com/mroosmalen/nanosv)
+  - [svim](https://github.com/eldariont/svim)
   - [survivor](https://github.com/fritzsedlazeck/SURVIVOR)
   - [mosdepth](https://github.com/brentp/mosdepth)
   - [minimap2](https://github.com/lh3/minimap2)

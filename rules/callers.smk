@@ -1,3 +1,25 @@
+rule svim_call:
+    input:
+        "{aligner}/alignment/{sample}.bam"
+    output:
+        "{aligner}/svim_calls/{sample}/final_results.vcf"
+    threads: 1
+    log:
+        "logs/{aligner}/svim_call/{sample}.log"
+    shell:
+        "svim alignment --sample {wildcards.sample} {wildcards.aligner}/svim_calls/{wildcards.sample}/ {input} 2> {log}"
+
+rule filter_svim:
+    input:
+        "{aligner}/svim_calls/{sample}/final_results.vcf"
+    output:
+        "{aligner}/svim_genotypes/{sample,[A-Za-z0-9]+}.vcf"
+    threads: 1
+    log:
+        "logs/{aligner}/svim_call/{sample}.filter.log"
+    shell:
+        "cat {input} | awk '{{ if($1 ~ /^#/) {{ print $0 }} else {{ if($6>40) {{ print $0 }} }} }}' > {output}"
+
 rule sniffles_call:
     input:
         "{aligner}/alignment/{sample}.bam"
