@@ -7,7 +7,8 @@ rule svim_call:
     log:
         "logs/{aligner}/svim_call/{sample}.log"
     shell:
-        "svim alignment --sample {wildcards.sample} {wildcards.aligner}/svim_calls/{wildcards.sample}/ {input} 2> {log}"
+        "svim alignment --sample {wildcards.sample} \
+         {wildcards.aligner}/svim_calls/{wildcards.sample}/ {input} 2> {log}"
 
 rule filter_svim:
     input:
@@ -18,7 +19,9 @@ rule filter_svim:
     log:
         "logs/{aligner}/svim_call/{sample}.filter.log"
     shell:
-        "cat {input} | awk '{{ if($1 ~ /^#/) {{ print $0 }} else {{ if($6>40) {{ print $0 }} }} }}' > {output}"
+        "cat {input} | \
+         awk '{{ if($1 ~ /^#/) {{ print $0 }} \
+         else {{ if($6>40) {{ print $0 }} }} }}' > {output}"
 
 rule sniffles_call:
     input:
