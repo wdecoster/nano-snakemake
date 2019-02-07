@@ -25,8 +25,8 @@ def main():
     precision = tp / len(test_set)
     recall = tp / len(truth_set)
     fmeasure = 2*(precision*recall)/(precision + recall)
-    print(f"Precision: {round(100 * precision, ndigits=1)}%")
-    print(f"Recall: {round(100 * recall, ndigits=1)}%")
+    print(f"Precision: {round(precision, ndigits=4)}%")
+    print(f"Recall: {round(recall, ndigits=4)}%")
     print(f"F-measure: {round(fmeasure, ndigits=4)}")
     if args.bar:
         bar_chart(combined_vcf)
