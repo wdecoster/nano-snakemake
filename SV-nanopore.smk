@@ -34,11 +34,11 @@ rule minimap2_pbsv:
     input:
         expand("minimap2_pbsv/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
-               caller=["sniffles", "nanosv"]),
+               caller=["sniffles", "nanosv", "svim"]),
         expand("minimap2_pbsv/SV-plots/SV-{caller}_carriers.png",
                caller=["sniffles", "nanosv"]),
         expand("minimap2_pbsv/{caller}_combined/annot_genotypes.vcf",
-               caller=["sniffles", "nanosv"]),
+               caller=["sniffles", "nanosv", "svim"]),
         expand("minimap2_pbsv/alignment_stats/{sample}.txt",
                sample=config["samples"]),
         "minimap2_pbsv/all_combined/annot_genotypes.vcf",
