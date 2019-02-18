@@ -11,7 +11,7 @@ include: "rules/vcf.smk"
 
 configfile: "config.yaml"
 
-##### Target rules #####
+# Target rules #
 
 rule minimap2:
     input:
