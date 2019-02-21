@@ -30,7 +30,7 @@ rule minimap2_pbsv_align:
         "logs/minimap2_pbsv/{sample}.log"
     shell:
         """
-        minimap2 -ax map-ont --eqx -L -O 5,56 -E 4,1 -B 5 \
+        minimap2 -ax map-ont --MD --eqx -L -O 5,56 -E 4,1 -B 5 \
          --secondary=no -z 400,50 -r 2k -Y \
          -R "@RG\tID:rg1a\tSM:{params.sample}" \
          -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
