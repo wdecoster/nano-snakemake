@@ -78,9 +78,11 @@ def is_variant(call):
 def make_venn(vcf, outname="venn.png"):
     positions = [[], []]
     for v in VCF(vcf):
-        for index, call in enumerate(v.gt_types):
-            if is_variant(call):
-                positions[index].append("{}:{}-{}".format(v.CHROM, v.start, v.INFO.get('SVTYPE')))
+        if not v.CHROM == 'chrEBV':
+            for index, call in enumerate(v.gt_types):
+                if is_variant(call):
+                    positions[index].append(
+                        "{}:{}-{}".format(v.CHROM, v.start, v.INFO.get('SVTYPE')))
     identifier_sets = [set(i) for i in positions]
     venn2(identifier_sets, set_labels=('Truth', 'Test'))
     plt.savefig(outname)
