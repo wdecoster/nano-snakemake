@@ -39,7 +39,7 @@ rule bcftools_reheader_sniffles:
     input:
         "{aligner}/sniffles_genotypes_temp/{sample}.vcf"
     output:
-        vcf = temp("{aligner}/sniffles_genotypes/{sample}.vcf"),
+        vcf = "{aligner}/sniffles_genotypes/{sample}.vcf",
         sample = temp("{aligner}/sniffles_genotypes/sample_{sample}.txt")
     params:
         sample = "{sample}"
