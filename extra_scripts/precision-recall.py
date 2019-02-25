@@ -12,6 +12,9 @@ import numpy as np
 
 def main():
     args = get_args()
+    sys.stderr.write("Deprecation warning:\n"
+                     "This script is here for legacy purposes.\n"
+                     "You should use _surpyvor prf_ instead.")
     if args.ignore_type:
         ignore_type = "-1"
     else:
