@@ -116,8 +116,8 @@ rule pbsv:
         bai = "minimap2_pbsv/alignment/{sample}.bam.bai",
         genome = config["genome"],
     output:
-        vcf = "minimap2_pbsv/pbsv/{sample}.vcf",
-        svsig = temp("minimap2_pbsv/pbsv/{sample}.svsig.gz"),
+        vcf = "minimap2_pbsv/pbsv_genotypes/{sample}.vcf",
+        svsig = temp("minimap2_pbsv/pbsv_svsig/{sample}.svsig.gz"),
     log:
         "logs/minimap2_pbsv/pbsv/{sample}.log"
     shell:
