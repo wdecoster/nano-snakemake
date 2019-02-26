@@ -37,6 +37,9 @@ def check_vcf(vcf):
 
 def main():
     args = get_args()
+    sys.stderr.write("Deprecation warning:\n"
+                     "This script is here for legacy purposes.\n"
+                     "You should use _surpyvor venn_ instead.")
     vcf = VCF(args.vcf)
     venn, positions = check_vcf(vcf)
     names = args.names or vcf.samples

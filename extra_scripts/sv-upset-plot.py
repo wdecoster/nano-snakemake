@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 
 def main():
     args = get_args()
+    sys.stderr.write("Deprecation warning:\n"
+                     "This script is here for legacy purposes.\n"
+                     "You should use _surpyvor upset_ instead.")
     if args.ignore_type:
         ignore_type = "-1"
     else:
@@ -91,7 +94,7 @@ def make_sets(vcf, names):
 
 
 def get_args():
-    parser = ArgumentParser(description="Calculate precision-recall metrics from 2 vcf files")
+    parser = ArgumentParser(description="Make upset plot for multiple SV vcf files")
     parser.add_argument("--variants",
                         help="vcfs containing structural variants",
                         required=True,
