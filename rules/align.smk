@@ -17,8 +17,8 @@ rule minimap2_align:
     shell:
         """
         minimap2 --MD -ax map-ont -t {threads} \
-        -R "@RG\\tID:{params.sample}\\tSM:{params.sample}" \
-        {input.genome} {input.fq}/*.fastq.gz | \
+         -R "@RG\\tID:{params.sample}\\tSM:{params.sample}" \
+         {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}
         """
 
