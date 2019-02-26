@@ -38,14 +38,15 @@ def check_vcf(vcf):
 def main():
     args = get_args()
     vcf = VCF(args.vcf)
-    venn, identifier_list = check_vcf(vcf)
+    venn, positions = check_vcf(vcf)
     names = args.names or vcf.samples
 
     for v in vcf:
         for index, call in enumerate(v.gt_types):
             if is_variant(call):
-                identifier_list[index].append(v.ID)
-    venn([set(i) for i in identifier_list], set_labels=names)
+                positions[index].append(
+                    "{}:{}-{}".format(v.CHROM, v.start, v.INFO.get('SVTYPE')))
+    venn([set(i) for i in positions], set_labels=names)
     plt.savefig(args.vcf.replace('.vcf', '.png'))
 
 
