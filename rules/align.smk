@@ -8,13 +8,19 @@ rule minimap2_align:
         genome = config["genome"]
     output:
         "minimap2/alignment/{sample}.bam"
+    params:
+        sample = "{sample}"
     threads:
         8
     log:
         "logs/minimap2/{sample}.log"
     shell:
-        "minimap2 --MD -ax map-ont -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
-         samtools sort -@ {threads} -o {output} - 2> {log}"
+        """
+        minimap2 --MD -ax map-ont -t {threads} \
+        -R "@RG\\tID:{params.sample}\\tSM:{params.sample}" \
+        {input.genome} {input.fq}/*.fastq.gz | \
+         samtools sort -@ {threads} -o {output} - 2> {log}
+        """
 
 rule minimap2_pbsv_align:
     input:
@@ -32,7 +38,7 @@ rule minimap2_pbsv_align:
         """
         minimap2 -ax map-ont --MD --eqx -L -O 5,56 -E 4,1 -B 5 \
          --secondary=no -z 400,50 -r 2k -Y \
-         -R "@RG\\tID:rg1a\\tSM:{params.sample}" \
+         -R "@RG\\tID:{params.sample}\\tSM:{params.sample}" \
          -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
          samtools sort -@ {threads} -o {output} - 2> {log}"""
 
@@ -57,13 +63,19 @@ rule minimap2_last_like_align:
         genome = config["genome"]
     output:
         "minimap2_last_like/alignment/{sample}.bam"
+    params:
+        sample = "{sample}"
     threads:
         8
     log:
         "logs/minimap2_last_like/{sample}.log"
     shell:
-        "minimap2 --MD -ax map-ont --no-long-join -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
-         samtools sort -@ {threads} -o {output} - 2> {log}"
+        """
+        minimap2 --MD -ax map-ont --no-long-join \
+        -R "@RG\\tID:{params.sample}\\tSM:{params.sample}" \
+        -r50 -t {threads} {input.genome} {input.fq}/*.fastq.gz | \
+         samtools sort -@ {threads} -o {output} - 2> {log}
+        """
 
 
 rule samtools_index:
