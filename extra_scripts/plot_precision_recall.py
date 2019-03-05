@@ -20,7 +20,8 @@ class Callset(object):
                            y=self.precision,
                            c=self.colour,
                            marker=self.shape,
-                           alpha=self.opacity)
+                           alpha=self.opacity,
+                           s=25)
 
 
 def main():
@@ -88,7 +89,7 @@ def get_args():
     parser.add_argument("--max",
                         help="A maximum value to which precision recall plot has to be limited",
                         type=int,
-                        default=100)
+                        default=1)
     parser.add_argument("--legend",
                         help="Put legend left or right",
                         default="left")
