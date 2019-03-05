@@ -15,12 +15,13 @@ def main():
         if not v.INFO.get('SVTYPE') == 'TRA':
             try:
                 if abs(v.INFO.get('SVLEN')) >= 50:
-                    len_dict[v.INFO.get('SVTYPE')].append(abs(v.INFO.get('SVLEN')))
+                    len_dict[get_svtype(v)].append(abs(v.INFO.get('SVLEN')))
             except TypeError:
                 if v.INFO.get('SVTYPE') == 'INV':
                     if (v.end - v.start) >= 50:
-                        len_dict[v.INFO.get('SVTYPE')].append(v.end - v.start)
-                        sys.stderr.write("SVLEN field missing. Inferred SV length from END and POS:\n{}\n\n".format(v))
+                        len_dict[get_svtype(v)].append(v.end - v.start)
+                        sys.stderr.write("SVLEN field missing. "
+                                         "Inferred SV length from END and POS:\n{}\n\n".format(v))
                 else:
                     sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
     with open(args.counts, 'w') as counts:
@@ -30,6 +31,13 @@ def main():
                 svtype, len(lengths), sum(lengths)))
     make_plot(dict_of_lengths=len_dict,
               output=args.output)
+
+
+def get_svtype(v):
+    if v.INFO.get('SVTYPE') == "INVDUP":
+        return "INV"
+    else:
+        return v.INFO.get('SVTYPE').split(':')[0].split('/')[0]
 
 
 def make_plot(dict_of_lengths, output):
@@ -42,7 +50,7 @@ def make_plot(dict_of_lengths, output):
     Second bar chart is up to 20kb, with bins of 100bp
      and uses log scaling on the y-axis
     """
-    standard_order = ['DEL', 'INS', 'DUP', 'INV']
+    standard_order = ['DEL', 'INS', 'INV', 'DUP']
     spec_order = sorted([i for i in dict_of_lengths.keys() if i not in standard_order])
     sorter = standard_order + spec_order
     names, lengths = zip(
