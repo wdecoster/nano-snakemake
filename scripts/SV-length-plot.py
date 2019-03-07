@@ -11,17 +11,22 @@ import matplotlib.pyplot as plt
 def main():
     args = get_args()
     len_dict = defaultdict(list)
-    for v in VCF(args.vcf):
-        if not v.INFO.get('SVTYPE') == 'TRA':
+    vcf = VCF(args.vcf)
+    if len(vcf.samples) > 1:
+        sys.stderr.write("\n\nWarning: this script does not support multiple samples in a vcf.\n")
+        sys.stderr.write("Plotting and counting only for {}.".format(vcf.samples[0]))
+    for v in vcf:
+        if is_variant(v.gt_types[0]) and not v.INFO.get('SVTYPE') == 'TRA':
             try:
-                if abs(v.INFO.get('SVLEN')) >= 50:
-                    len_dict[get_svtype(v)].append(abs(v.INFO.get('SVLEN')))
+                if get_svlen(v) >= 50:
+                    len_dict[get_svtype(v)].append(get_svlen(v))
             except TypeError:
                 if v.INFO.get('SVTYPE') == 'INV':
                     if (v.end - v.start) >= 50:
                         len_dict[get_svtype(v)].append(v.end - v.start)
-                        sys.stderr.write("SVLEN field missing. "
-                                         "Inferred SV length from END and POS:\n{}\n\n".format(v))
+                        sys.stderr.write(
+                            "SVLEN field missing.\n"
+                            "Inferred SV length from END and POS:\n{}\n\n".format(v))
                 else:
                     sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
     with open(args.counts, 'w') as counts:
@@ -38,6 +43,10 @@ def get_svtype(v):
         return "INV"
     else:
         return v.INFO.get('SVTYPE').split(':')[0].split('/')[0]
+
+
+def get_svlen(v):
+    return abs(v.INFO.get('SVLEN'))
 
 
 def make_plot(dict_of_lengths, output):
@@ -80,6 +89,16 @@ def make_plot(dict_of_lengths, output):
                fontsize="small")
     plt.tight_layout()
     plt.savefig(output)
+
+
+def is_variant(call):
+    """Check if a variant position qualifies as a variant
+
+    0,1,2,3==HOM_REF, HET, UNKNOWN, HOM_ALT"""
+    if call == 1 or call == 3:
+        return True
+    else:
+        return False
 
 
 def get_args():
