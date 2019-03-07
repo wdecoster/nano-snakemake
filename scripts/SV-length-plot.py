@@ -24,11 +24,14 @@ def main():
                 if v.INFO.get('SVTYPE') == 'INV':
                     if (v.end - v.start) >= 50:
                         len_dict[get_svtype(v)].append(v.end - v.start)
-                        sys.stderr.write(
-                            "SVLEN field missing.\n"
-                            "Inferred SV length from END and POS:\n{}\n\n".format(v))
+                elif v.INFO.get('SVTYPE') == 'BND':
+                    try:
+                        len_dict['BND'].append(abs(v.INFO.get('MATEDIST')))
+                    except TypeError:
+                        len_dict['BND'].append(0)
                 else:
                     sys.stderr.write("Exception when parsing variant:\n{}\n\n".format(v))
+                    len_dict["parse_error"].append(0)
     with open(args.counts, 'w') as counts:
         counts.write("Number of nucleotides affected by SV:\n")
         for svtype, lengths in len_dict.items():
@@ -67,7 +70,7 @@ def make_plot(dict_of_lengths, output):
                 key=lambda x: sorter.index(x[0])))
     plt.subplot(2, 1, 1)
     plt.hist(x=lengths,
-             bins=[i for i in range(0, 2000, 10)],
+             bins=[i for i in range(50, 2000, 10)],
              stacked=True,
              histtype='bar',
              label=names)
