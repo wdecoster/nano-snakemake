@@ -37,13 +37,15 @@ def main():
     if len(aligners) > 1:
         plt.gca().add_artist(plt.legend(handles=[lines[i] for i in aligner_index],
                                         labels=aligners,
-                                        loc='upper {}'.format(args.legend),
-                                        frameon=False))
+                                        loc='upper {}'.format(args.legend_pos),
+                                        frameon=False,
+                                        ncol=args.legend_col))
     if len(callers) > 1:
         plt.gca().add_artist(plt.legend(handles=[lines[i] for i in caller_index],
                                         labels=callers,
-                                        loc='lower {}'.format(args.legend),
-                                        frameon=False))
+                                        loc='lower {}'.format(args.legend_pos),
+                                        frameon=False,
+                                        ncol=args.legend_col))
     plt.tight_layout()
     plt.savefig("precision-recall.png")
 
@@ -90,9 +92,17 @@ def get_args():
                         help="A maximum value to which precision recall plot has to be limited",
                         type=int,
                         default=1)
-    parser.add_argument("--legend",
+    parser.add_argument("--legend_pos",
                         help="Put legend left or right",
-                        default="left")
+                        default="left",
+                        choices=['left', 'right'])
+    parser.add_argument("--legend_col",
+                        help="Number of columns for legend",
+                        default=1,
+                        type=int)
+    parser.add_argument("--gradient",
+                        help="Use a color gradient",
+                        action="store_true")
     return parser.parse_args()
 
 
