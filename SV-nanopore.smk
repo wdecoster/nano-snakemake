@@ -24,9 +24,6 @@ rule fast:
                caller=["sniffles", "svim"]),
         expand("minimap2/alignment_stats/{sample}.txt",
                sample=config["samples"]),
-        "minimap2/all_combined/annot_genotypes.vcf",
-        "minimap2/mosdepth/regions.combined.gz",
-        "minimap2/mosdepth_global_plot/global.html",
         expand("minimap2/npinv/{sample}.vcf",
                sample=config["samples"]),
 
