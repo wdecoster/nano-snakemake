@@ -13,6 +13,24 @@ configfile: "config.yaml"
 
 # Target rules #
 
+rule fast:
+    input:
+        expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles", "svim"]),
+        expand("minimap2/SV-plots/SV-{caller}_carriers.png",
+               caller=["sniffles"]),
+        expand("minimap2/{caller}_combined/annot_genotypes.vcf",
+               caller=["sniffles", "svim"]),
+        expand("minimap2/alignment_stats/{sample}.txt",
+               sample=config["samples"]),
+        "minimap2/all_combined/annot_genotypes.vcf",
+        "minimap2/mosdepth/regions.combined.gz",
+        "minimap2/mosdepth_global_plot/global.html",
+        expand("minimap2/npinv/{sample}.vcf",
+               sample=config["samples"]),
+
+
 rule minimap2:
     input:
         expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
