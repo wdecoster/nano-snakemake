@@ -27,7 +27,6 @@ rule fast:
         expand("minimap2/npinv/{sample}.vcf",
                sample=config["samples"]),
 
-
 rule minimap2:
     input:
         expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
@@ -61,24 +60,6 @@ rule minimap2_pbsv:
         "minimap2_pbsv/mosdepth_global_plot/global.html",
         expand("minimap2_pbsv/npinv/{sample}.vcf",
                sample=config["samples"]),
-
-rule minimap2_last_like:
-    input:
-        expand("minimap2_last_like/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
-               sample=config["samples"],
-               caller=["sniffles", "nanosv", "svim"]),
-        expand("minimap2_last_like/SV-plots/SV-{caller}_carriers.png",
-               caller=["sniffles", "nanosv"]),
-        expand("minimap2_last_like/{caller}_combined/annot_genotypes.vcf",
-               caller=["sniffles", "nanosv", "svim"]),
-        expand("minimap2_last_like/alignment_stats/{sample}.txt",
-               sample=config["samples"]),
-        expand("minimap2_last_like/npinv/{sample}.vcf",
-               sample=config["samples"]),
-        "minimap2_last_like/all_combined/annot_genotypes.vcf",
-        "minimap2_last_like/mosdepth/regions.combined.gz",
-        "minimap2_last_like/mosdepth_global_plot/global.html",
-
 
 rule ngmlr:
     input:
