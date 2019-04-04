@@ -65,7 +65,7 @@ rule ngmlr:
     input:
         expand("ngmlr/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
-               caller=["sniffles", "nanosv", "svim"]),
+               caller=["sniffles", "nanosv"]),
         expand("ngmlr/SV-plots/SV-{caller}_carriers.png",
                caller=["sniffles", "nanosv"]),
         expand("ngmlr/{caller}_combined/annot_genotypes.vcf",
