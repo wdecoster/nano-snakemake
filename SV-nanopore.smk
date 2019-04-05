@@ -17,7 +17,7 @@ rule fast:
     input:
         expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
-               caller=["sniffles", "svim"]),
+               caller=["sniffles"]),
         expand("minimap2/SV-plots/SV-{caller}_carriers.png",
                caller=["sniffles"]),
         expand("minimap2/{caller}_combined/annot_genotypes.vcf",
@@ -31,7 +31,7 @@ rule minimap2:
     input:
         expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
-               caller=["sniffles", "nanosv", "svim"]),
+               caller=["sniffles", "nanosv"]),
         expand("minimap2/SV-plots/SV-{caller}_carriers.png",
                caller=["sniffles", "nanosv"]),
         expand("minimap2/{caller}_combined/annot_genotypes.vcf",
@@ -48,7 +48,7 @@ rule minimap2_pbsv:
     input:
         expand("minimap2_pbsv/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
                sample=config["samples"],
-               caller=["sniffles", "nanosv", "svim", "pbsv"]),
+               caller=["sniffles", "nanosv", "pbsv"]),
         expand("minimap2_pbsv/SV-plots/SV-{caller}_carriers.png",
                caller=["sniffles", "nanosv", "pbsv"]),
         expand("minimap2_pbsv/{caller}_combined/annot_genotypes.vcf",
