@@ -27,6 +27,24 @@ rule fast:
         expand("minimap2/npinv/{sample}.vcf",
                sample=config["samples"]),
 
+rule precise:
+    input:
+        expand("ngmlr/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
+               sample=config["samples"],
+               caller=["sniffles"]),
+        expand("ngmlr/SV-plots/SV-{caller}_carriers.png",
+               caller=["sniffles"]),
+        expand("ngmlr/{caller}_combined/annot_genotypes.vcf",
+               caller=["sniffles", "svim"]),
+        expand("ngmlr/alignment_stats/{sample}.txt",
+               sample=config["samples"]),
+        expand("ngmlr/npinv/{sample}.vcf",
+               sample=config["samples"]),
+        "ngmlr/all_combined/annot_genotypes.vcf",
+        "ngmlr/mosdepth/regions.combined.gz",
+        "ngmlr/mosdepth_global_plot/global.html",
+
+
 rule minimap2:
     input:
         expand("minimap2/SV-plots/SV-length_{caller}_genotypes_{sample}.png",
