@@ -40,7 +40,6 @@ rule precise:
                sample=config["samples"]),
         expand("ngmlr/npinv/{sample}.vcf",
                sample=config["samples"]),
-        "ngmlr/all_combined/annot_genotypes.vcf",
         "ngmlr/mosdepth/regions.combined.gz",
         "ngmlr/mosdepth_global_plot/global.html",
 
