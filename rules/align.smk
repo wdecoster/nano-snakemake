@@ -2,6 +2,10 @@ def get_samples(wildcards):
     return config["samples"][wildcards.sample]
 
 
+def get_all_samples(wildcards):
+    return config["samples"].values()
+
+
 rule minimap2_align:
     input:
         fq = get_samples,
@@ -80,3 +84,43 @@ rule alignment_stats:
     shell:
         os.path.join(workflow.basedir, "scripts/alignment_stats.py") + \
             " -o {output} {input.bam} 2> {log}"
+
+
+rule make_last_index:
+    input:
+        config["genome"]
+    output:
+        wmstat = "last/index/genome.wmstat",
+        masked_genome = "last/index/genome-wm.fa",
+        indexf = "last/index/windowmasked-index.bck",
+    log:
+        "logs/last/mask_and_build_index/index.log"
+    threads: 24
+    params:
+        index_base = "last/index/windowmasked-index"
+    shell:
+        """
+        windowmasker -mk_counts -in {input} > {output.wmstat} && \
+        windowmasker -ustat {output.wmstat} -outfmt fasta -in {input} > {output.masked_genome} && \
+        lastdb -P{threads} -uNEAR -R11 -c {params.index_base} {output.masked_genome}
+        """
+
+rule last_train:
+    input:
+        fq = get_all_samples,
+        indexf = "last/index/windowmasked-index.bck",
+    output:
+        params = "last/index/last-train.params",
+        fqs = temp("last/index/fqs.fofn"),
+        fas = temp("last/index/allreads.fas"),
+    log:
+        "logs/last/last-train/train.log"
+    params:
+        index_base = "last/index/windowmasked-index"
+    threads: 36
+    shell:
+        """
+        for i in {input.fq}; do echo ${{i}}*.fastq.gz >> {output.fqs}; done 2>> {log}
+        zcat $(cat {output.fqs} | tr '\\n' ' ') \
+         | awk 'NR % 4 == 2 {{print ">" ++n "\\n" $0}}' > {output.fas} 2>> {log}
+        last-train -P{threads} -Q0 {params.index_base} {output.fas} > {output.params} 2>> {log}

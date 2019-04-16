@@ -94,3 +94,7 @@ rule ngmlr:
         "ngmlr/all_combined/annot_genotypes.vcf",
         "ngmlr/mosdepth/regions.combined.gz",
         "ngmlr/mosdepth_global_plot/global.html",
+
+rule last_prepare:
+    input:
+        "last/index/last-train.params"
