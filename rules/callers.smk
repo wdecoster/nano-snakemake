@@ -108,7 +108,7 @@ rule npinv:
     log:
         "logs/{aligner}/npinv/{sample}.log"
     shell:
-        "npinv --input {input.bam} --output {output}"
+        "npinv --input {input.bam} --output {output} 2> {log}"
 
 rule pbsv:
     input:
@@ -122,6 +122,6 @@ rule pbsv:
         "logs/minimap2_pbsv/pbsv/{sample}.log"
     shell:
         """
-        pbsv discover {input.bam} {output.svsig} && \
-        pbsv call {input.genome} {output.svsig} {output.vcf}
+        pbsv discover {input.bam} {output.svsig} 2> {log} && \
+        pbsv call {input.genome} {output.svsig} {output.vcf} 2>> {log}
         """
