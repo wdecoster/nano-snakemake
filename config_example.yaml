@@ -14,3 +14,12 @@ vcfanno_conf:
 
 parameters:
     survivor_distance: 500
+
+last-train:
+    pass # created by rule last_prepare
+
+refgene:
+    pass # http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/refGene.txt.gz
+
+microsat:
+    pass # http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/microsat.txt.gz

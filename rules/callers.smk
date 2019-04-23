@@ -125,3 +125,31 @@ rule pbsv:
         pbsv discover {input.bam} {output.svsig} 2> {log} && \
         pbsv call {input.genome} {output.svsig} {output.vcf} 2>> {log}
         """
+
+rule tandem_genotypes:
+    input:
+        "last/last-align/{sample}.maf.gz"
+    output:
+        "last/tandem-genotypes/{sample}-tg.txt"
+    params:
+        microsat = config["microsat"],
+        refgene = config["refgene"]
+    log:
+        "logs/tandem_genotypes/{sample}.log"
+    shell:
+        """
+        tandem-genotypes -g {params.refgene} {params.microsat} {input} > {output} 2> {log}
+        """
+
+rule reformat_tandem_genotypes:
+    input:
+        expand("last/tandem-genotypes/{sample}-tg.txt", sample=config["samples"])
+    output:
+        "last/tandem_genotypes_reformatted/combined.txt"
+    params:
+        names = ' '.join(config["samples"].keys())
+    log:
+        'last/tandem_genotypes/reformat.log'
+    shell:
+        os.path.join(workflow.basedir, "scripts/reformat_tandem-genotypes.py") + \
+            " --input {input} --names {params.names} > {output} 2> {log}"

@@ -98,3 +98,7 @@ rule ngmlr:
 rule last_prepare:
     input:
         "last/index/last-train.params"
+
+rule last:
+    input:
+        "last/tandem_genotypes_reformatted/combined.txt"

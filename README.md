@@ -14,6 +14,7 @@ Contributions welcome!
  - [svim](https://github.com/eldariont/svim)
  - [pbsv](https://github.com/PacificBiosciences/pbsv)
  - [npInv](https://github.com/haojingshao/npInv)
+ - [tandem-genotypes](https://github.com/mcfrith/tandem-genotypes)
  - [survivor](https://github.com/fritzsedlazeck/SURVIVOR)
  - [mosdepth](https://github.com/brentp/mosdepth)
  - [cyvcf2](https://github.com/brentp/cyvcf2)
@@ -32,7 +33,7 @@ The required dependencies can be installed using `conda create -f environment.ya
  - 'minimap2_pbsv': minimap2 alignment with pbsv-specific parameters with pbsv, SVIM, NanoSV and npInv SV calling
  - 'ngmlr': ngmlr with Sniffles, NanoSV, SVIM and npInv SV calling
  - 'last-prepare': create a LAST index and train aligner parameters using last-train
-
+ - 'last': LAST alignment with tandem-genotypes STR calling
 
 The folder "scripts" contains scripts necessary for the pipeline.   
 The folder "extra_scripts" contains scripts I wrote while playing around with the results, mainly visualizations.

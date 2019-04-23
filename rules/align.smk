@@ -124,3 +124,23 @@ rule last_train:
         zcat $(cat {output.fqs} | tr '\\n' ' ') \
          | awk 'NR % 4 == 2 {{print ">" ++n "\\n" $0}}' > {output.fas} 2>> {log}
         last-train -P{threads} -Q0 {params.index_base} {output.fas} > {output.params} 2>> {log}
+        """
+
+rule last_align:
+    input:
+        fq = get_samples,
+        genome = config["genome"],
+        train = config["last-train"],
+    threads: 16
+    params:
+        index_base = "last/index/windowmasked-index"
+    log:
+        "logs/last/last-align/{sample}.log"
+    output:
+        "last/last-align/{sample}.maf.gz"
+    shell:
+        """
+        lastal -P{threads} -p {input.train} {params.index_base} {input.fq}/*.fastq.gz \
+         | last-split -m1e-6 \
+         | gzip > {output} 2> {log}
+        """
