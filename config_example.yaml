@@ -18,6 +18,9 @@ parameters:
 last-train:
     pass # created by rule last_prepare
 
+last-index:
+    pass # created by rule last_prepare
+
 refgene:
     pass # http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/refGene.txt.gz
 

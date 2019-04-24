@@ -130,17 +130,17 @@ rule last_align:
     input:
         fq = get_samples,
         genome = config["genome"],
-        train = config["last-train"],
     threads: 16
     params:
-        index_base = "last/index/windowmasked-index"
+        index_base = config["last-index"],
+        train = config["last-train"],
     log:
         "logs/last/last-align/{sample}.log"
     output:
         "last/last-align/{sample}.maf.gz"
     shell:
         """
-        lastal -P{threads} -p {input.train} {params.index_base} {input.fq}/*.fastq.gz \
+        lastal -P{threads} -p {params.train} {params.index_base} {input.fq}/*.fastq.gz \
          | last-split -m1e-6 \
          | gzip > {output} 2> {log}
         """
