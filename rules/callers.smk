@@ -47,6 +47,8 @@ rule sniffles_genotype:
         "sniffles --mapped_reads {input.bam} \
                   --vcf {output} \
                   --threads {threads} \
+                  --report_seq \
+                  --cluster \
                   --Ivcf {input.ivcf} 2> {log}"
 
 rule samtools_split:
