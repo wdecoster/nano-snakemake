@@ -21,7 +21,7 @@ class Callset(object):
                            c=self.colour,
                            marker=self.shape,
                            alpha=self.opacity,
-                           s=25)
+                           s=75)
 
 
 def main():
@@ -58,7 +58,7 @@ def aligner_to_symbol(calls):
     return a list of indices for which each aligner is found uniquely and all aligners
     sorted by aligners
     """
-    symbols = ['o', '+', 'x', 'v', '*', 'D', 's', 'p', '8', 'X']
+    symbols = ['.', '+', 'x', 'v', '*', 'D', 's', 'p', '8', 'X']
     aligners = sorted(set([c.aligner for c in calls]), reverse=True)
     aligner_to_symbol_dict = {a: s for a, s in zip(aligners, symbols)}
     for c in calls:
