@@ -42,4 +42,4 @@ The folder "extra_scripts" contains scripts I wrote while playing around with th
 [surpyvor](https://github.com/wdecoster/surpyvor): a python wrapper around SURVIVOR, with additional convenience functions for creating high sensitivity and high confidence variant sets, calculating precision and recall metrics and visualizations using venn and upset plots.
 
 ## Citation
-[Structural variants identified by Oxford Nanopore PromethION sequencing of the human genome](https://www.biorxiv.org/content/10.1101/434118v2)
+[Structural variants identified by Oxford Nanopore PromethION sequencing of the human genome](https://genome.cshlp.org/content/early/2019/06/11/gr.244939.118.abstract)
