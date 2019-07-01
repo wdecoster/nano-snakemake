@@ -24,7 +24,7 @@ Contributions welcome!
  - [matplotlib](https://github.com/matplotlib/matplotlib)
  - [seaborn](https://github.com/mwaskom/seaborn)
 
-The required dependencies can be installed using `conda create -f environment.yaml`
+The required dependencies can be installed using `conda env create -f environment.yaml`
 
 ## Commands
  - 'fast': minimap2 alignment with Sniffles and SVIM SV calling
