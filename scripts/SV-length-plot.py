@@ -16,7 +16,7 @@ def main():
         sys.stderr.write("\n\nWarning: this script does not support multiple samples in a vcf.\n")
         sys.stderr.write("Plotting and counting only for {}.".format(vcf.samples[0]))
     for v in vcf:
-        if is_variant(v.gt_types[0]) and not v.INFO.get('SVTYPE') == 'TRA':
+        if is_variant(v.gt_types) and not v.INFO.get('SVTYPE') == 'TRA':
             try:
                 if get_svlen(v) >= 50:
                     len_dict[get_svtype(v)].append(get_svlen(v))
@@ -94,14 +94,19 @@ def make_plot(dict_of_lengths, output):
     plt.savefig(output)
 
 
-def is_variant(call):
+def is_variant(gt_types):
     """Check if a variant position qualifies as a variant
 
-    0,1,2,3==HOM_REF, HET, UNKNOWN, HOM_ALT"""
-    if call == 1 or call == 3:
+    0,1,2,3==HOM_REF, HET, UNKNOWN, HOM_ALT
+    If the VCF does not contain genotypes/zygosities, and hence gt_types is empty,
+    then assume the position is indeed a variant allele"""
+    if not gt_types:
         return True
     else:
-        return False
+        if gt_types[0] in [1, 3]:
+            return True
+        else:
+            return False
 
 
 def get_args():
