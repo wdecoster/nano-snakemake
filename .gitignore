@@ -1,2 +1,9 @@
 .remote-sync.json
 config.yaml
+out/
+log/
+res/**
+!res/conf
+!res/conf/vcfanno_conf-example.toml
+.snakemake*
+config.yaml

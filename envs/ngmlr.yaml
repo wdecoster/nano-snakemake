@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - ngmlr=0.2.7
+  - samtools=1.9

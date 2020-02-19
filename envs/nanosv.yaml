@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - samtools=1.9
+  - nanosv=1.2.3

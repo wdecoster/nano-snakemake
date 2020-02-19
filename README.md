@@ -24,7 +24,7 @@ Contributions welcome!
  - [matplotlib](https://github.com/matplotlib/matplotlib)
  - [seaborn](https://github.com/mwaskom/seaborn)
 
-The required dependencies can be installed using `conda env create -f environment.yaml`
+Conda environment files containing the dependencies can be found in the `envs` directory. These can be automatically installed and managed by providing the `--use-conda` argument to snakemake: `snakemake --use-conda ...`.
 
 ## Commands
  - 'fast': minimap2 alignment with Sniffles and SVIM SV calling

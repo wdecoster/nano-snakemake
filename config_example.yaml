@@ -1,3 +1,6 @@
+outdir: out
+logdir: log
+
 samples:
     sampleA: /path/to/sampleA/fastq
     sampleB: /path/to/sampleB/fastq
@@ -26,3 +29,15 @@ refgene:
 
 microsat:
     pass # http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/microsat.txt.gz
+
+resources:
+    default:
+        mem: 2000
+        walltime: 120
+        threads: 1
+    nglmr_align:
+        mem: 64000
+        walltime: 1440
+        threads: 36
+    samtools_index:
+        threads: 4

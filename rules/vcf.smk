@@ -20,69 +20,87 @@ if not CHROMOSOMES:
 
 rule bcftools_reheader:
     input:
-        "{aligner}/split_nanosv_genotypes/{sample}-{chromosome}.vcf",
+        f"{OUTDIR}/{{aligner}}/split_nanosv_genotypes/{{sample}}-{{chromosome}}.vcf",
     output:
-        vcf = temp("{aligner}/split_nanosv_genotypes_renamed/{sample}-{chromosome}.vcf"),
-        sample = temp("{aligner}/split_nanosv_genotypes_renamed/sample_{sample}-{chromosome}.txt")
-    params:
-        sample = "{sample}"
+        vcf = temp(f"{OUTDIR}/{{aligner}}/split_nanosv_genotypes_renamed/{{sample}}-{{chromosome}}.vcf"),
+        sample = temp(f"{OUTDIR}/{{aligner}}/split_nanosv_genotypes_renamed/sample_{{sample}}-{{chromosome}}.txt")
+    threads: get_resource("bcftools_reheader", "threads")
+    resources:
+        mem=get_resource("bcftools_reheader", "mem"),
+        walltime=get_resource("bcftools_reheader", "walltime")
     log:
-        "logs/{aligner}/bcftools_reheader/{sample}-{chromosome}.log"
+        "logs/{{aligner}}/bcftools_reheader/{{sample}}-{{chromosome}}.log"
+    conda: "../envs/bcftools.yaml"
     shell:
         """
-        echo {params.sample} > {output.sample} &&
+        echo {wildcards.sample} > {output.sample} &&
         bcftools reheader -s {output.sample} {input} -o {output.vcf} 2> {log}
         """
 
 rule bcftools_reheader_sniffles:
     """Rule to be deleted as soon as ngmlr uses read groups correctly"""
     input:
-        "{aligner}/sniffles_genotypes_temp/{sample}.vcf"
+        f"{OUTDIR}/{{aligner}}/sniffles_genotypes_temp/{{sample}}.vcf"
     output:
-        vcf = "{aligner}/sniffles_genotypes/{sample}.vcf",
-        sample = temp("{aligner}/sniffles_genotypes/sample_{sample}.txt")
-    params:
-        sample = "{sample}"
+        vcf = f"{OUTDIR}/{{aligner}}/sniffles_genotypes/{{sample}}.vcf",
+        sample = temp(f"{OUTDIR}/{{aligner}}/sniffles_genotypes/sample_{{sample}}.txt")
+    threads: get_resource("bcftools_reheader_sniffles", "threads")
+    resources:
+        mem=get_resource("bcftools_reheader_sniffles", "mem"),
+        walltime=get_resource("bcftools_reheader_sniffles", "walltime")
     log:
-        "logs/{aligner}/bcftools_reheader/{sample}.log"
+        f"{LOGDIR}/{{aligner}}/bcftools_reheader/{{sample}}.log"
+    conda: "../envs/bcftools.yaml"
     shell:
         """
-        echo {params.sample} > {output.sample} &&
+        echo {wildcards.sample} > {output.sample} &&
         bcftools reheader -s {output.sample} {input} -o {output.vcf} 2> {log}
         """
 
 rule cat_vcfs:
     input:
-        expand("{{aligner}}/split_nanosv_genotypes_renamed/{{sample}}-{chromosome}.vcf",
-               chromosome=CHROMOSOMES)
+        [f"{OUTDIR}/{{aligner}}/split_nanosv_genotypes_renamed/{{sample}}-{chromosome}.vcf" for chromosome in CHROMOSOMES]
     output:
-        "{aligner}/nanosv_genotypes/{sample}.vcf"
+        f"{OUTDIR}/{{aligner}}/nanosv_genotypes/{{sample}}.vcf"
+    threads: get_resource("cat_vcfs", "threads")
+    resources:
+        mem=get_resource("cat_vcfs", "mem"),
+        walltime=get_resource("cat_vcfs", "walltime")
     log:
-        "logs/{aligner}/bcftools-concat/{sample}.log"
+        f"{LOGDIR}/{{aligner}}/bcftools-concat/{{sample}}.log"
+    conda: "../envs/bcftools.yaml"
     shell:
         "bcftools concat {input} | bcftools sort - -o {output} 2> {log}"
 
 rule sort_vcf:
     input:
-        "{aligner}/{caller}_combined/genotypes.vcf"
+        f"{OUTDIR}/{{aligner}}/{{caller}}_combined/genotypes.vcf"
     output:
-        temp("{aligner}/{caller}_combined/sorted_genotypes.vcf")
+        temp(f"{OUTDIR}/{{aligner}}/{{caller}}_combined/sorted_genotypes.vcf")
+    threads: get_resource("sort_vcf", "threads")
+    resources:
+        mem=get_resource("sort_vcf", "mem"),
+        walltime=get_resource("sort_vcf", "walltime")
     log:
-        "logs/{aligner}/bcftools_sort/sorting_{caller}.log"
-    threads: 8
+        f"{LOGDIR}/{{aligner}}/bcftools_sort/sorting_{{caller}}.log"
+    conda: "../envs/bcftools.yaml"
     shell:
         "bcftools sort {input} > {output} 2> {log}"
 
 
 rule annotate_vcf:
     input:
-        "{aligner}/{caller}_combined/sorted_genotypes.vcf"
+        f"{OUTDIR}/{{aligner}}/{{caller}}_combined/sorted_genotypes.vcf"
     output:
-        "{aligner}/{caller}_combined/annot_genotypes.vcf"
+        f"{OUTDIR}/{{aligner}}/{{caller}}_combined/annot_genotypes.vcf"
     log:
-        "logs/{aligner}/annotate_vcf/annotate_{caller}.log"
+        f"{LOGDIR}/{{aligner}}/annotate_vcf/annotate_{{caller}}.log"
     params:
         conf = config["vcfanno_conf"],
-    threads: 8
+    threads: get_resource("annotate_vcf", "threads")
+    resources:
+        mem=get_resource("annotate_vcf", "mem"),
+        walltime=get_resource("annotate_vcf", "walltime")
+    conda: "../envs/vcfanno.yaml"
     shell:
         "vcfanno -ends -p {threads} {params.conf} {input} > {output} 2> {log}"

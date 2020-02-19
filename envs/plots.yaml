@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - cyvcf2=0.10.0
+  - matplotlib=3.0.2
